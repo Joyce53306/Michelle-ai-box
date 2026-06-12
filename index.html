@@ -1,106 +1,73 @@
-<!DOCTYPE html>
-<html lang="zh-TW">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Joyce Teacher 的幼兒英語教學全能基地</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        body {
-            background: linear-gradient(135deg, #fef9c3 0%, #ecfeff 50%, #e0f2fe 100%);
-            color: #1e293b;
-            font-family: 'Segoe UI', system-ui, sans-serif;
-        }
-        .joyce-card {
-            background: rgba(255, 255, 255, 0.8);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.5);
-            transition: transform 0.3s ease;
-        }
-        .joyce-card:hover { transform: translateY(-5px); }
-        .joyce-btn {
-            background: linear-gradient(135deg, #38bdf8 0%, #0ea5e9 100%);
-            color: white;
-            border-radius: 9999px;
-            transition: all 0.3s;
-        }
-        .joyce-btn:hover { filter: brightness(1.1); box-shadow: 0 4px 12px rgba(14, 165, 233, 0.3); }
-        .joyce-btn-secondary {
-            background: white;
-            color: #0284c7;
-            border: 1px solid #bae6fd;
-            border-radius: 9999px;
-            transition: all 0.3s;
-        }
-        .joyce-btn-secondary:hover { background: #f0f9ff; }
-    </style>
-</head>
-<body class="min-h-screen flex flex-col md:flex-row">
+<!-- === AI BOX 完整選單區塊 === -->
+<div class="ai-box-container">
 
-    <!-- 側邊欄 -->
-    <aside class="w-full md:w-64 bg-white/60 backdrop-blur-md p-6 border-b md:border-b-0 md:border-r border-white flex flex-col justify-between flex-shrink-0">
-        <div>
-            <div class="flex items-center gap-3 mb-8">
-                <div class="w-12 h-12 bg-gradient-to-tr from-amber-400 to-orange-400 rounded-full flex items-center justify-center text-2xl shadow-lg">👩‍🏫</div>
-                <div>
-                    <h1 class="text-sm font-bold text-slate-800">Joyce's Base</h1>
-                    <p class="text-[10px] text-sky-600 font-bold uppercase tracking-wider">Teaching Hub</p>
-                </div>
-            </div>
-            <nav class="space-y-2 text-sm font-semibold text-slate-600">
-                <div class="bg-sky-500/10 text-sky-700 p-3 rounded-xl flex items-center gap-2">✨ 精選必備</div>
-                <div class="hover:bg-white/50 p-3 rounded-xl flex items-center gap-2 cursor-pointer transition">🎮 課堂遊戲</div>
-                <div class="hover:bg-white/50 p-3 rounded-xl flex items-center gap-2 cursor-pointer transition">📝 教案大腦</div>
-                <div class="hover:bg-white/50 p-3 rounded-xl flex items-center gap-2 cursor-pointer transition">🎵 感官音樂</div>
-            </nav>
-        </div>
-        <div class="text-[10px] text-slate-400">© 2026 Joyce Teacher</div>
-    </aside>
+    <!-- 1. Alphabet 分類 -->
+    <div class="category-section">
+        <h2>🔤 Alphabet 字母遊戲</h2>
+        <ul class="game-list">
+            <li>
+                <span class="badge badge-small">小班</span>
+                <a href="https://joyce53306.github.io/alphabet-match/" target="_blank" rel="noopener noreferrer">Alphabet Match</a>
+            </li>
+            <li>
+                <span class="badge badge-medium">中班</span>
+                <a href="https://joyce53306.github.io/alphabet-pair-match/" target="_blank" rel="noopener noreferrer">Alphabet Pair Match</a>
+            </li>
+            <li>
+                <span class="badge badge-large">大班</span>
+                <a href="https://joyce53306.github.io/phonics-level-up/" target="_blank" rel="noopener noreferrer">Phonics Level Up!</a>
+            </li>
+            <li>
+                <span class="badge badge-support">中班加強</span>
+                <a href="https://joyce53306.github.io/phonics-hero/" target="_blank" rel="noopener noreferrer">Phonics Hero</a>
+            </li>
+        </ul>
+    </div>
 
-    <!-- 主內容區 -->
-    <main class="flex-1 p-6 md:p-10 overflow-y-auto">
-        <header class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-10">
-            <h2 class="text-2xl font-bold text-slate-800">✨ 精選教學工具</h2>
-            <div class="text-[11px] bg-amber-200/80 text-amber-900 px-4 py-1.5 rounded-full font-bold">
-                👶 2-6歲幼兒英語核心 (David 冒險宇宙)
-            </div>
-        </header>
+    <hr class="section-divider">
 
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            
-            <!-- 卡片 1 -->
-            <div class="joyce-card rounded-3xl p-6 flex flex-col justify-between shadow-sm">
-                <div>
-                    <h3 class="font-bold text-slate-800 mb-2 flex items-center gap-2">🎮 課堂互動遊戲基地</h3>
-                    <p class="text-xs text-slate-500 leading-relaxed mb-6">點擊開啟您部署在 GitHub 的互動專案，上課投影或平板練習皆適用。</p>
-                </div>
-                <div class="flex flex-col gap-2">
-                    <a href="https://joyce53306.github.io/big-class-english/" target="_blank" rel="noopener noreferrer" class="joyce-btn text-center text-xs py-3 font-bold">🚀 大班互動 (Phonics)</a>
-                    <a href="https://joyce53306.github.io/mid-class-english/" target="_blank" rel="noopener noreferrer" class="joyce-btn-secondary text-center text-xs py-3 font-bold">🎈 中班複習</a>
-                </div>
-            </div>
+    <!-- 2. Phonics and Sight words 分類 -->
+    <div class="category-section">
+        <h2>📚 Phonics & Sight Words 拼讀與常用字</h2>
+        <ul class="game-list">
+            <li>
+                <span class="badge badge-phonics">短母音</span>
+                <a href="https://joyce53306.github.io/mid-phonics-english/" target="_blank" rel="noopener noreferrer">Mid Phonics English (短母音)</a>
+            </li>
+            <li>
+                <span class="badge badge-phonics">長母音</span>
+                <a href="https://joyce53306.github.io/phonics-long-vowels/" target="_blank" rel="noopener noreferrer">Phonics Long Vowels (長母音)</a>
+            </li>
+            <li>
+                <span class="badge badge-sight-mid">中班常用字</span>
+                <a href="https://joyce53306.github.io/mid-sight-words/" target="_blank" rel="noopener noreferrer">Mid Sight Words</a>
+            </li>
+            <li>
+                <span class="badge badge-sight-review">中大班複習</span>
+                <a href="https://joyce53306.github.io/Review-sight-words/" target="_blank" rel="noopener noreferrer">Review Sight Words</a>
+            </li>
+        </ul>
+    </div>
 
-            <!-- 卡片 2 -->
-            <div class="joyce-card rounded-3xl p-6 flex flex-col justify-between shadow-sm">
-                <div>
-                    <h3 class="font-bold text-slate-800 mb-2 flex items-center gap-2">💌 小報產生器</h3>
-                    <p class="text-xs text-slate-500 leading-relaxed mb-6">將本週教學進度輸入 Gemini，快速生成 Swan / Kangaroo 班級專屬小語。</p>
-                </div>
-                <a href="https://gemini.google.com" target="_blank" rel="noopener noreferrer" class="joyce-btn-secondary text-center text-xs py-3 font-bold">開啟 Gemini 助理</a>
-            </div>
+    <hr class="section-divider">
 
-            <!-- 卡片 3 (互動彩蛋) -->
-            <div class="joyce-card rounded-3xl p-6 flex flex-col justify-between shadow-sm">
-                <div>
-                    <h3 class="font-bold text-slate-800 mb-2 flex items-center gap-2">🔄 生活用語轉盤</h3>
-                    <p class="text-xs text-slate-500 leading-relaxed mb-6">上課隨機點選，全班配合 TPR 大動作說出日常對話！</p>
-                </div>
-                <button onclick="alert('David 正在魔法森林探險中，新功能即將上線！🚀')" class="bg-slate-200 text-slate-500 text-xs py-3 rounded-full font-bold border border-dashed border-slate-300">
-                    創意製作中 🚧
-                </button>
-            </div>
-        </div>
-    </main>
+    <!-- 3. David 互動基地 分類 -->
+    <div class="category-section">
+        <h2>🚀 David 互動基地 (口語與句型)</h2>
+        <ul class="game-list">
+            <li>
+                <span class="badge badge-small">小班</span>
+                <a href="https://joyce53306.github.io/Small-Class-Sentences-Practicess/" target="_blank" rel="noopener noreferrer">Small Class Sentences Practice (David 的冒險)</a>
+            </li>
+            <li>
+                <span class="badge badge-medium">中班</span>
+                <a href="https://joyce53306.github.io/mid-class-english/" target="_blank" rel="noopener noreferrer">Mid Class English (David 的冒險)</a>
+            </li>
+            <li>
+                <span class="badge badge-large">大班</span>
+                <a href="https://joyce53306.github.io/big-class-english/" target="_blank" rel="noopener noreferrer">Big Class English (David 的冒險)</a>
+            </li>
+        </ul>
+    </div>
 
-</body>
-</html>
+</div>
