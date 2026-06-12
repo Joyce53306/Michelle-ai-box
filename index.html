@@ -9,165 +9,143 @@
         body {
             background: linear-gradient(135deg, #fef9c3 0%, #ecfeff 50%, #e0f2fe 100%);
             color: #1e293b;
-            font-family: 'Segoe UI', system-ui, sans-serif;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
         }
         .joyce-card {
-            background: rgba(255, 255, 255, 0.8);
+            background: rgba(255, 255, 255, 0.85);
             backdrop-filter: blur(12px);
             border: 1px solid rgba(255, 255, 255, 0.5);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-        .joyce-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05);
         }
     </style>
 </head>
-<body class="min-h-screen">
+<body class="min-h-screen flex">
 
-    <div class="flex">
-        <aside class="w-64 min-h-screen bg-white/70 backdrop-blur-md p-6 border-r border-slate-100 sticky top-0 h-screen flex flex-col justify-between">
-            <div>
-                <div class="flex items-center gap-3 mb-8">
-                    <div class="w-10 h-10 bg-amber-500 rounded-xl flex items-center justify-center text-white font-bold text-xl shadow-md shadow-amber-500/20">J</div>
-                    <div>
-                        <h1 class="font-bold text-slate-800 tracking-wide text-lg">Joyce's Base</h1>
-                        <p class="text-xs text-amber-600 font-semibold uppercase tracking-wider">Teaching Hub</p>
-                    </div>
+    <aside class="w-64 bg-white/70 backdrop-blur-md p-6 border-r border-slate-100 sticky top-0 h-screen flex flex-col justify-between">
+        <div>
+            <div class="flex items-center gap-3 mb-8">
+                <div class="w-10 h-10 bg-amber-600 rounded-xl flex items-center justify-center text-white font-bold text-xl shadow-md">J</div>
+                <div>
+                    <h1 class="font-bold text-slate-800 tracking-wide text-lg">Joyce's Base</h1>
+                    <p class="text-xs text-amber-600 font-semibold uppercase tracking-wider">Teaching Hub</p>
                 </div>
-                
-                <nav class="space-y-1">
-                    <a href="#" class="flex items-center gap-3 px-4 py-3 rounded-xl bg-amber-500/10 text-amber-700 font-medium text-sm transition-all">
-                        <span>✨</span> 精選必備
-                    </a>
-                    <a href="#" class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-600 hover:bg-slate-50 font-medium text-sm transition-all">
-                        <span>🎮</span> 課堂遊戲
-                    </a>
-                    <a href="#" class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-600 hover:bg-slate-50 font-medium text-sm transition-all">
-                        <span>🧠</span> 教室大腦
-                    </a>
-                    <a href="#" class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-600 hover:bg-slate-50 font-medium text-sm transition-all">
-                        <span>🎵</span> 感官音樂
-                    </a>
-                </nav>
             </div>
             
-            <div class="p-4 bg-amber-50 rounded-2xl border border-amber-100/50">
-                <p class="text-xs text-amber-800 font-medium leading-relaxed">🎯 2-6歲幼兒英語核心 (David 冒險宇宙)</p>
-            </div>
-        </aside>
+            <nav class="space-y-1">
+                <a href="#" class="flex items-center gap-3 px-4 py-3 rounded-xl bg-amber-500/10 text-amber-700 font-semibold text-sm transition-all">
+                    <span>✨</span> 精選必備
+                </a>
+                <a href="#" class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-600 hover:bg-slate-50 font-medium text-sm transition-all">
+                    <span>🎮</span> 課堂遊戲
+                </a>
+                <a href="#" class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-600 hover:bg-slate-50 font-medium text-sm transition-all">
+                    <span>🧠</span> 教室大腦
+                </a>
+                <a href="#" class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-600 hover:bg-slate-50 font-medium text-sm transition-all">
+                    <span>🎵</span> 感官音樂
+                </a>
+            </nav>
+        </div>
+        
+        <div class="p-4 bg-amber-50 rounded-2xl border border-amber-100/50">
+            <p class="text-xs text-amber-800 font-medium leading-relaxed">🎯 2-6歲幼兒英語核心 (David 冒險宇宙)</p>
+        </div>
+    </aside>
 
-        <main class="flex-1 p-10 max-w-7xl mx-auto">
-            <div class="flex justify-between items-center mb-10">
-                <div class="flex items-center gap-3">
-                    <span class="text-2xl">✨</span>
-                    <h2 class="text-2xl font-bold text-slate-800">精選教學工具</h2>
-                </div>
-            </div>
+    <main class="flex-1 p-10 max-w-7xl mx-auto">
+        <div class="flex items-center gap-3 mb-8">
+            <span class="text-2xl">✨</span>
+            <h2 class="text-2xl font-bold text-slate-800">精選必備工具</h2>
+        </div>
 
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <div class="joyce-card rounded-3xl p-8 shadow-sm">
+            <div class="flex items-center gap-3 mb-2">
+                <span class="text-xl">🎮</span>
+                <h3 class="font-bold text-slate-800 text-lg">課堂互動遊戲基地</h3>
+            </div>
+            <p class="text-sm text-slate-400 mb-6">點擊開啟您部署在 GitHub 的互動專案，上課投影或平板練習皆適用。</p>
+
+            <div class="space-y-6">
                 
-                <div class="joyce-card rounded-3xl p-6 lg:col-span-2 shadow-sm">
-                    <div class="flex items-center gap-3 mb-3">
-                        <span class="text-xl">🎮</span>
-                        <h3 class="font-bold text-slate-800 text-lg">課堂互動遊戲基地</h3>
+                <div class="bg-[#fef3c7]/40 rounded-3xl p-6 border border-[#fde68a]/50">
+                    <div class="flex items-center gap-2 mb-4">
+                        <span class="text-base">🇲</span>
+                        <h4 class="font-bold text-gray-800 text-lg tracking-wide">Alphabet</h4>
                     </div>
-                    <p class="text-sm text-slate-500 mb-6">點擊開啟您部署在 GitHub 的互動專案，上課投影或平板練習皆適用。</p>
+                    <div class="grid grid-cols-4 gap-4">
+                        <a href="https://joyce53306.github.io/alphabet-match/" target="_blank" class="bg-[#e5e7eb]/70 hover:bg-[#d1d5db] text-gray-800 border border-gray-300/60 rounded-2xl py-5 px-4 text-center transition-all flex flex-col justify-center items-center shadow-sm">
+                            <span class="font-bold text-xl mb-1.5 text-gray-900">小</span>
+                            <span class="text-xs text-gray-500 font-mono tracking-tight">alphabet-match</span>
+                        </a>
+                        <a href="https://joyce53306.github.io/alphabet-pair-match/" target="_blank" class="bg-[#e5e7eb]/70 hover:bg-[#d1d5db] text-gray-800 border border-gray-300/60 rounded-2xl py-5 px-4 text-center transition-all flex flex-col justify-center items-center shadow-sm">
+                            <span class="font-bold text-xl mb-1.5 text-gray-900">中</span>
+                            <span class="text-xs text-gray-500 font-mono tracking-tight">alphabet-pair-match</span>
+                        </a>
+                        <a href="https://joyce53306.github.io/phonics-level-up/" target="_blank" class="bg-[#e5e7eb]/70 hover:bg-[#d1d5db] text-gray-800 border border-gray-300/60 rounded-2xl py-5 px-4 text-center transition-all flex flex-col justify-center items-center shadow-sm">
+                            <span class="font-bold text-xl mb-1.5 text-gray-900">大</span>
+                            <span class="text-xs text-gray-500 font-mono tracking-tight">phonics-level-up</span>
+                        </a>
+                        <a href="https://joyce53306.github.io/phonics-hero/" target="_blank" class="bg-[#e5e7eb]/70 hover:bg-[#d1d5db] text-gray-800 border border-gray-300/60 rounded-2xl py-5 px-4 text-center transition-all flex flex-col justify-center items-center shadow-sm">
+                            <span class="font-bold text-xl mb-1.5 text-gray-900">中弱</span>
+                            <span class="text-xs text-gray-500 font-mono tracking-tight">phonics-hero</span>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="bg-[#e0e7ff]/40 rounded-3xl p-6 border border-[#c7d2fe]/40">
+                    <div class="flex items-center gap-2 mb-4">
+                        <span class="text-base">📚</span>
+                        <h4 class="font-bold text-gray-800 text-lg tracking-wide">Phonics & Sight Words</h4>
+                    </div>
+                    <div class="grid grid-cols-4 gap-4">
+                        <a href="https://joyce53306.github.io/mid-phonics-english/" target="_blank" class="bg-[#e5e7eb]/70 hover:bg-[#d1d5db] text-gray-800 border border-gray-300/60 rounded-2xl py-5 px-4 text-center transition-all flex flex-col justify-center items-center shadow-sm">
+                            <span class="font-bold text-xl mb-1.5 text-gray-900">短母音</span>
+                            <span class="text-xs text-gray-500 font-mono tracking-tight">mid-phonics-english</span>
+                        </a>
+                        <a href="https://joyce53306.github.io/phonics-long-vowels/" target="_blank" class="bg-[#e5e7eb]/70 hover:bg-[#d1d5db] text-gray-800 border border-gray-300/60 rounded-2xl py-5 px-4 text-center transition-all flex flex-col justify-center items-center shadow-sm">
+                            <span class="font-bold text-xl mb-1.5 text-gray-900">長母音</span>
+                            <span class="text-xs text-gray-500 font-mono tracking-tight">phonics-long-vowels</span>
+                        </a>
+                        <a href="https://joyce53306.github.io/mid-sight-words/" target="_blank" class="bg-[#e5e7eb]/70 hover:bg-[#d1d5db] text-gray-800 border border-gray-300/60 rounded-2xl py-5 px-4 text-center transition-all flex flex-col justify-center items-center shadow-sm">
+                            <span class="font-bold text-xl mb-1.5 text-gray-900">中班</span>
+                            <span class="text-xs text-gray-500 font-mono tracking-tight">mid-sight-words</span>
+                        </a>
+                        <a href="https://joyce53306.github.io/Review-sight-words/" target="_blank" class="bg-[#e5e7eb]/70 hover:bg-[#d1d5db] text-gray-800 border border-gray-300/60 rounded-2xl py-5 px-4 text-center transition-all flex flex-col justify-center items-center shadow-sm">
+                            <span class="font-bold text-xl mb-1.5 text-gray-900">大中班</span>
+                            <span class="text-xs text-gray-500 font-mono tracking-tight">Review-sight-words</span>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="bg-[#ccfbf1]/40 rounded-3xl p-6 border border-[#99f6e4]/40 relative">
+                    <div class="flex items-center gap-2 mb-4">
+                        <span class="text-base">🚀</span>
+                        <h4 class="font-bold text-gray-800 text-lg tracking-wide">David 互動基地</h4>
+                    </div>
+                    <div class="grid grid-cols-3 gap-4">
+                        <a href="https://joyce53306.github.io/Small-Class-Sentences-Practicess/" target="_blank" class="bg-[#e5e7eb]/70 hover:bg-[#d1d5db] text-gray-800 border border-gray-300/60 rounded-2xl py-5 px-4 text-center transition-all flex flex-col justify-center items-center shadow-sm">
+                            <span class="font-bold text-xl mb-1.5 text-gray-900">小班</span>
+                            <span class="text-xs text-gray-500 font-mono tracking-tight">Small-Class-Sentences</span>
+                        </a>
+                        <a href="https://joyce53306.github.io/mid-class-english/" target="_blank" class="bg-[#e5e7eb]/70 hover:bg-[#d1d5db] text-gray-800 border border-gray-300/60 rounded-2xl py-5 px-4 text-center transition-all flex flex-col justify-center items-center shadow-sm">
+                            <span class="font-bold text-xl mb-1.5 text-gray-900">中班</span>
+                            <span class="text-xs text-gray-500 font-mono tracking-tight">mid-class-english</span>
+                        </a>
+                        <a href="https://joyce53306.github.io/big-class-english/" target="_blank" class="bg-[#e5e7eb]/70 hover:bg-[#d1d5db] text-gray-800 border border-gray-300/60 rounded-2xl py-5 px-4 text-center transition-all flex flex-col justify-center items-center shadow-sm">
+                            <span class="font-bold text-xl mb-1.5 text-gray-900">大班</span>
+                            <span class="text-xs text-gray-500 font-mono tracking-tight">big-class-english</span>
+                        </a>
+                    </div>
                     
-                    <div class="space-y-6">
-                        <div>
-                            <h4 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3">🔤 Alphabet 字母遊戲</h4>
-                            <div class="grid grid-cols-2 gap-3">
-                                <a href="https://joyce53306.github.io/alphabet-match/" target="_blank" class="flex items-center justify-between p-3 bg-amber-600 hover:bg-amber-700 text-white rounded-xl font-medium text-sm transition-all shadow-sm shadow-amber-600/10">
-                                    <span>Alphabet Match</span>
-                                    <span class="text-xs bg-white/20 px-2 py-0.5 rounded-md">小班</span>
-                                </a>
-                                <a href="https://joyce53306.github.io/alphabet-pair-match/" target="_blank" class="flex items-center justify-between p-3 bg-amber-600 hover:bg-amber-700 text-white rounded-xl font-medium text-sm transition-all shadow-sm shadow-amber-600/10">
-                                    <span>Alphabet Pair Match</span>
-                                    <span class="text-xs bg-white/20 px-2 py-0.5 rounded-md">中班</span>
-                                </a>
-                                <a href="https://joyce53306.github.io/phonics-level-up/" target="_blank" class="flex items-center justify-between p-3 bg-amber-600 hover:bg-amber-700 text-white rounded-xl font-medium text-sm transition-all shadow-sm shadow-amber-600/10">
-                                    <span>Phonics Level Up!</span>
-                                    <span class="text-xs bg-white/20 px-2 py-0.5 rounded-md">大班</span>
-                                </a>
-                                <a href="https://joyce53306.github.io/phonics-hero/" target="_blank" class="flex items-center justify-between p-3 bg-amber-600 hover:bg-amber-700 text-white rounded-xl font-medium text-sm transition-all shadow-sm shadow-amber-600/10">
-                                    <span>Phonics Hero</span>
-                                    <span class="text-xs bg-white/20 px-2 py-0.5 rounded-md">中弱加強</span>
-                                </a>
-                            </div>
-                        </div>
-
-                        <div>
-                            <h4 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3">📚 Phonics & Sight Words 常用字</h4>
-                            <div class="grid grid-cols-2 gap-3">
-                                <a href="https://joyce53306.github.io/mid-phonics-english/" target="_blank" class="flex items-center justify-between p-3 bg-indigo-500 hover:bg-indigo-600 text-white rounded-xl font-medium text-sm transition-all shadow-sm shadow-indigo-500/10">
-                                    <span>Mid Phonics (短母音)</span>
-                                    <span class="text-xs bg-white/20 px-2 py-0.5 rounded-md">短母音</span>
-                                </a>
-                                <a href="https://joyce53306.github.io/phonics-long-vowels/" target="_blank" class="flex items-center justify-between p-3 bg-indigo-500 hover:bg-indigo-600 text-white rounded-xl font-medium text-sm transition-all shadow-sm shadow-indigo-500/10">
-                                    <span>Phonics Long Vowels</span>
-                                    <span class="text-xs bg-white/20 px-2 py-0.5 rounded-md">長母音</span>
-                                </a>
-                                <a href="https://joyce53306.github.io/mid-sight-words/" target="_blank" class="flex items-center justify-between p-3 bg-rose-500 hover:bg-rose-600 text-white rounded-xl font-medium text-sm transition-all shadow-sm shadow-rose-500/10">
-                                    <span>Mid Sight Words</span>
-                                    <span class="text-xs bg-white/20 px-2 py-0.5 rounded-md">中班</span>
-                                </a>
-                                <a href="https://joyce53306.github.io/Review-sight-words/" target="_blank" class="flex items-center justify-between p-3 bg-rose-500 hover:bg-rose-600 text-white rounded-xl font-medium text-sm transition-all shadow-sm shadow-rose-500/10">
-                                    <span>Review Sight Words</span>
-                                    <span class="text-xs bg-white/20 px-2 py-0.5 rounded-md">中大班</span>
-                                </a>
-                            </div>
-                        </div>
-
-                        <div>
-                            <h4 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3">🚀 David 互動基地 (口語與句型)</h4>
-                            <div class="grid grid-cols-3 gap-3">
-                                <a href="https://joyce53306.github.io/Small-Class-Sentences-Practicess/" target="_blank" class="flex flex-col items-center justify-center p-3 bg-cyan-500 hover:bg-cyan-600 text-white rounded-xl font-medium text-xs text-center transition-all shadow-sm shadow-cyan-500/10">
-                                    <span class="font-bold mb-1">小班句型</span>
-                                    <span class="opacity-80">David Practice</span>
-                                </a>
-                                <a href="https://joyce53306.github.io/mid-class-english/" target="_blank" class="flex flex-col items-center justify-center p-3 bg-cyan-500 hover:bg-cyan-600 text-white rounded-xl font-medium text-xs text-center transition-all shadow-sm shadow-cyan-500/10">
-                                    <span class="font-bold mb-1">中班口語</span>
-                                    <span class="opacity-80">David Adventure</span>
-                                </a>
-                                <a href="https://joyce53306.github.io/big-class-english/" target="_blank" class="flex flex-col items-center justify-center p-3 bg-cyan-500 hover:bg-cyan-600 text-white rounded-xl font-medium text-xs text-center transition-all shadow-sm shadow-cyan-500/10">
-                                    <span class="font-bold mb-1">大班口語</span>
-                                    <span class="opacity-80">David Level Up</span>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="joyce-card rounded-3xl p-6 shadow-sm flex flex-col justify-between">
-                    <div>
-                        <div class="flex items-center gap-3 mb-3">
-                            <span class="text-xl">💌</span>
-                            <h3 class="font-bold text-slate-800 text-lg">小報產生器</h3>
-                        </div>
-                        <p class="text-sm text-slate-500 mb-6">將本週教學進度輸入 Gemini，快速生成 Swan / Kangaroo 班級專屬小報。</p>
-                    </div>
-                    <button class="w-full py-3 bg-slate-100 hover:bg-slate-200 text-slate-700 font-medium rounded-xl text-sm transition-all">
-                        開啟 Gemini 助理
-                    </button>
-                </div>
-
-                <div class="joyce-card rounded-3xl p-6 shadow-sm flex flex-col justify-between">
-                    <div>
-                        <div class="flex items-center gap-3 mb-3">
-                            <span class="text-xl">🔄</span>
-                            <h3 class="font-bold text-slate-800 text-lg">生活用語轉盤</h3>
-                        </div>
-                        <p class="text-sm text-slate-500 mb-6">上課隨機點選，全班配合 TPR 大動作說出日常對話！</p>
-                    </div>
-                    <div class="w-full py-3 bg-slate-50 text-slate-400 font-medium rounded-xl text-sm text-center border border-dashed border-slate-200">
-                        創意製作中 🚧
+                    <div class="absolute right-6 bottom-6 text-white opacity-60 pointer-events-none">
+                        <svg class="w-8 h-8 fill-current" viewBox="0 0 24 24">
+                            <path d="M12 0l3.09 8.24h8.91l-7.2 5.57 2.75 8.19-7.55-5.32-7.55 5.32 2.75-8.19-7.2-5.57h8.91z"/>
+                        </svg>
                     </div>
                 </div>
 
             </div>
-        </main>
-    </div>
+        </div>
+    </main>
 
 </body>
 </html>
