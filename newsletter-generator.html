@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>課堂快訊產生器</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', '微軟正黑體', sans-serif;
+      background: #f5f5f7;
+      color: #1d1d1f;
+      min-height: 100vh;
+      padding: 1.5rem 1rem;
+    }
+    .wrap { max-width: 720px; margin: 0 auto; }
+    h1 {
+      font-size: 22px;
+      font-weight: 600;
+      margin-bottom: 1.25rem;
+      color: #1d1d1f;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .tab-row { display: flex; gap: 8px; margin-bottom: 1.25rem; }
+    .tab {
+      border: 1px solid #d1d1d6;
+      border-radius: 10px;
+      padding: 7px 18px;
+      font-size: 14px;
+      cursor: pointer;
+      background: #fff;
+      color: #6e6e73;
+      font-family: inherit;
+      transition: all .15s;
+    }
+    .tab.active {
+      background: #1d1d1f;
+      color: #fff;
+      border-color: #1d1d1f;
+      font-weight: 500;
+    }
+    .section {
+      background: #fff;
+      border: 1px solid #e5e5ea;
+      border-radius: 14px;
+      padding: 1rem 1.25rem;
+      margin-bottom: 1rem;
+    }
+    .section-title {
+      font-size: 13px;
+      color: #6e6e73;
+      margin-bottom: 10px;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: .4px;
+    }
+    textarea, input {
+      width: 100%;
+      background: #f5f5f7;
+      border: 1px solid #e5e5ea;
+      border-radius: 8px;
+      padding: 8px 10px;
+      font-size: 14px;
+      color: #1d1d1f;
+      font-family: inherit;
+      resize: vertical;
+      transition: border-color .15s;
+    }
+    textarea:focus, input:focus { outline: none; border-color: #0071e3; }
+    .row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .field-label { font-size: 12px; color: #6e6e73; margin-bottom: 5px; }
+    .link-row { display: flex; gap: 6px; align-items: center; margin-bottom: 6px; }
+    .link-row input { flex: 1; }
+    .cat-input { width: 110px !important; flex: none !important; }
+    .add-btn {
+      background: none;
+      border: 1px dashed #c7c7cc;
+      border-radius: 8px;
+      color: #6e6e73;
+      font-size: 13px;
+      padding: 6px 10px;
+      cursor: pointer;
+      width: 100%;
+      margin-top: 8px;
+      font-family: inherit;
+      transition: background .15s;
+    }
+    .add-btn:hover { background: #f5f5f7; }
+    .remove-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: #c7c7cc;
+      font-size: 20px;
+      padding: 0 4px;
+      flex-shrink: 0;
+      line-height: 1;
+      transition: color .15s;
+    }
+    .remove-btn:hover { color: #ff3b30; }
+    .link-group {
+      border: 1px solid #e5e5ea;
+      border-radius: 10px;
+      padding: 10px 12px;
+      margin-bottom: 10px;
+    }
+    .link-group-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 8px;
+    }
+    .link-group-header input { font-weight: 600; font-size: 14px; }
+    .link-group-header .remove-btn { margin-left: auto; }
+    .col-hint {
+      display: grid;
+      grid-template-columns: 110px 1fr 2fr 28px;
+      gap: 6px;
+      font-size: 11px;
+      color: #aeaeb2;
+      margin-bottom: 4px;
+    }
+    .generate-btn {
+      background: #0071e3;
+      border: none;
+      border-radius: 10px;
+      font-size: 15px;
+      font-weight: 500;
+      color: #fff;
+      padding: 12px 0;
+      width: 100%;
+      cursor: pointer;
+      margin-top: 0.5rem;
+      font-family: inherit;
+      transition: background .15s;
+    }
+    .generate-btn:hover { background: #0077ed; }
+    /* Preview */
+    .preview {
+      background: #fffdf5;
+      border: 1px solid #e8d88a;
+      border-radius: 14px;
+      padding: 1.5rem 1.75rem;
+      font-size: 15px;
+      line-height: 2;
+      color: #333;
+    }
+    .preview h3 { font-size: 17px; font-weight: 600; margin-bottom: 0.5rem; color: #3d2e00; }
+    .preview .lbl { font-weight: 600; color: #5a4200; }
+    .preview a { color: #0071e3; }
+    .preview ul { margin-left: 1.5rem; }
+    .btn-row { display: flex; gap: 8px; margin-top: 1rem; flex-wrap: wrap; }
+    .action-btn {
+      background: #fff;
+      border: 1px solid #d1d1d6;
+      border-radius: 8px;
+      color: #1d1d1f;
+      font-size: 13px;
+      padding: 7px 16px;
+      cursor: pointer;
+      font-family: inherit;
+      transition: background .15s;
+    }
+    .action-btn:hover { background: #f5f5f7; }
+    @media (max-width: 520px) {
+      .row { grid-template-columns: 1fr; }
+      .col-hint { grid-template-columns: 90px 1fr 1fr 28px; }
+      .cat-input { width: 90px !important; }
+    }
+  </style>
+</head>
+<body>
+<div class="wrap">
+  <h1>📰 課堂快訊產生器</h1>
+
+  <div class="tab-row">
+    <button class="tab active" onclick="showTab('edit')">✏️ 編輯內容</button>
+    <button class="tab" onclick="showTab('preview')">👁️ 預覽快訊</button>
+  </div>
+
+  <!-- EDIT PANEL -->
+  <div id="edit-panel">
+
+    <div class="section">
+      <div class="section-title">日期 / 班級</div>
+      <div class="row">
+        <div>
+          <div class="field-label">日期</div>
+          <input type="text" id="date" placeholder="例：2025年6月第9週" />
+        </div>
+        <div>
+          <div class="field-label">班級</div>
+          <input type="text" id="class-name" placeholder="例：中班" />
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">本週字母</div>
+      <div id="letters-list"></div>
+      <button class="add-btn" onclick="addLetter()">＋ 新增字母</button>
+    </div>
+
+    <div class="section">
+      <div class="section-title">本週生字</div>
+      <textarea id="vocab" rows="3" placeholder="例：sing唱歌, dance跳舞, do yoga做瑜珈, play dress up玩扮演遊戲"></textarea>
+    </div>
+
+    <div class="section">
+      <div class="section-title">本週句型</div>
+      <div id="sentences-list"></div>
+      <button class="add-btn" onclick="addSentence()">＋ 新增句型</button>
+    </div>
+
+    <div class="section">
+      <div class="section-title">老師的話</div>
+      <textarea id="teacher-note" rows="3" placeholder="例：孩子們做Show and Tell 愈來愈有信心，請多多讚美孩子的努力。"></textarea>
+    </div>
+
+    <div class="section">
+      <div class="section-title">本週帶回 / 下週攜帶</div>
+      <div class="row">
+        <div>
+          <div class="field-label">本週帶回</div>
+          <textarea id="bring-home" rows="2" placeholder="例：We Are Friends課本、ABC字母本、數字學習單"></textarea>
+        </div>
+        <div>
+          <div class="field-label">下週攜帶</div>
+          <textarea id="bring-next" rows="2" placeholder="例：課本和ABC字母本（週一）"></textarea>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">本週作業</div>
+      <textarea id="homework" rows="2" placeholder="例：圈字作業：with"></textarea>
+    </div>
+
+    <div class="section">
+      <div class="section-title">🎬 影片連結</div>
+      <div id="video-groups"></div>
+      <button class="add-btn" onclick="addGroup('video-groups', '影片')">＋ 新增分類（例：字母影片 / 主題影片）</button>
+    </div>
+
+    <div class="section">
+      <div class="section-title">🎵 歌曲連結</div>
+      <div id="song-groups"></div>
+      <button class="add-btn" onclick="addGroup('song-groups', '歌曲')">＋ 新增分類（例：字母歌曲 / 主題歌曲）</button>
+    </div>
+
+    <button class="generate-btn" onclick="generate()">產生快訊 ↗</button>
+  </div>
+
+  <!-- PREVIEW PANEL -->
+  <div id="preview-panel" style="display:none;">
+    <div class="preview" id="preview-box"></div>
+    <div class="btn-row">
+      <button class="action-btn" onclick="copyText()">📋 複製文字</button>
+      <button class="action-btn" onclick="showTab('edit')">✏️ 繼續編輯</button>
+    </div>
+  </div>
+</div>
+
+<script>
+function showTab(t) {
+  document.getElementById('edit-panel').style.display = t === 'edit' ? '' : 'none';
+  document.getElementById('preview-panel').style.display = t === 'preview' ? '' : 'none';
+  document.querySelectorAll('.tab').forEach((b, i) =>
+    b.classList.toggle('active', (t === 'edit' && i === 0) || (t === 'preview' && i === 1))
+  );
+}
+
+function addLetter(alpha = '', word = '') {
+  const d = document.createElement('div');
+  d.className = 'link-row';
+  d.innerHTML = `
+    <input type="text" class="cat-input" placeholder="例：W w" class="letter-alpha" value="${alpha}" />
+    <input type="text" placeholder="單字，例：watermelon 西瓜" class="letter-word" value="${word}" />
+    <button class="remove-btn" onclick="this.parentNode.remove()">×</button>`;
+  document.getElementById('letters-list').appendChild(d);
+}
+
+function addSentence(en = '', zh = '') {
+  const d = document.createElement('div');
+  d.className = 'link-row';
+  d.innerHTML = `
+    <input type="text" placeholder="英文句型" class="sent-en" value="${en}" />
+    <input type="text" placeholder="中文翻譯" class="sent-zh" value="${zh}" />
+    <button class="remove-btn" onclick="this.parentNode.remove()">×</button>`;
+  document.getElementById('sentences-list').appendChild(d);
+}
+
+function addGroup(containerId, defaultName, links = []) {
+  const g = document.createElement('div');
+  g.className = 'link-group';
+  g.innerHTML = `
+    <div class="link-group-header">
+      <span style="font-size:16px;">🏷️</span>
+      <input type="text" placeholder="分類名稱，例：字母歌曲 / 主題影片" class="group-name" value="${defaultName}" />
+      <button class="remove-btn" onclick="this.closest('.link-group').remove()">×</button>
+    </div>
+    <div class="col-hint"><span>分類標籤</span><span>說明名稱</span><span>連結網址</span><span></span></div>
+    <div class="link-items"></div>
+    <button class="add-btn" onclick="addLinkItem(this.previousElementSibling)">＋ 新增連結</button>
+  `;
+  document.getElementById(containerId).appendChild(g);
+  const itemsDiv = g.querySelector('.link-items');
+  if (links.length) links.forEach(l => addLinkItem(itemsDiv, l.cat, l.label, l.url));
+  else addLinkItem(itemsDiv);
+}
+
+function addLinkItem(container, cat = '', label = '', url = '') {
+  const d = document.createElement('div');
+  d.className = 'link-row';
+  d.innerHTML = `
+    <input type="text" class="cat-input" placeholder="例：字母W" value="${cat}" />
+    <input type="text" placeholder="說明名稱" value="${label}" style="flex:1;" />
+    <input type="text" placeholder="https://..." value="${url}" style="flex:2;" />
+    <button class="remove-btn" onclick="this.parentNode.remove()">×</button>`;
+  container.appendChild(d);
+}
+
+function buildGroupsHTML(containerId) {
+  let html = '';
+  document.querySelectorAll(`#${containerId} .link-group`).forEach(g => {
+    const name = g.querySelector('.group-name').value.trim();
+    let rows = [];
+    g.querySelectorAll('.link-items .link-row').forEach(row => {
+      const inputs = row.querySelectorAll('input');
+      const cat = inputs[0].value.trim();
+      const lbl = inputs[1].value.trim();
+      const url = inputs[2].value.trim();
+      if (url) rows.push({ cat, lbl, url });
+    });
+    if (rows.length) {
+      html += `<p style="margin-top:8px;"><span class="lbl">・${name}：</span></p><ul>`;
+      rows.forEach(r => {
+        const display = [r.cat, r.lbl].filter(Boolean).join(' — ');
+        html += `<li><a href="${r.url}" target="_blank">${display || r.url}</a></li>`;
+      });
+      html += `</ul>`;
+    }
+  });
+  return html;
+}
+
+function generate() {
+  const date = document.getElementById('date').value.trim();
+  const cls = document.getElementById('class-name').value.trim();
+  const vocab = document.getElementById('vocab').value.trim();
+  const note = document.getElementById('teacher-note').value.trim();
+  const bringHome = document.getElementById('bring-home').value.trim();
+  const bringNext = document.getElementById('bring-next').value.trim();
+  const homework = document.getElementById('homework').value.trim();
+
+  const alphaInputs = document.querySelectorAll('#letters-list .link-row');
+  let letterLines = [];
+  alphaInputs.forEach(row => {
+    const ins = row.querySelectorAll('input');
+    if (ins[0].value.trim()) letterLines.push(`${ins[0].value.trim()} ${ins[1].value.trim()}`);
+  });
+
+  const sentRows = document.querySelectorAll('#sentences-list .link-row');
+  let sentLines = [];
+  sentRows.forEach(row => {
+    const ins = row.querySelectorAll('input');
+    if (ins[0].value.trim()) sentLines.push(`${ins[0].value.trim()}　${ins[1].value.trim()}`);
+  });
+
+  let html = `<h3>親愛的爸爸媽媽您好：</h3>`;
+  if (date || cls) html += `<p><span class="lbl">日期：</span>${date}　<span class="lbl">班級：</span>${cls}</p><br>`;
+  if (letterLines.length) html += `<p><span class="lbl">📖 本週字母：</span>${letterLines.join('，')}</p>`;
+  if (vocab) html += `<p><span class="lbl">📝 生字：</span>${vocab}</p>`;
+  if (sentLines.length) {
+    html += `<p><span class="lbl">💬 句型：</span></p><ul>`;
+    sentLines.forEach(s => html += `<li>${s}</li>`);
+    html += `</ul>`;
+  }
+  if (note) html += `<br><p>${note}</p>`;
+  if (bringHome || bringNext) {
+    html += `<br>`;
+    if (bringHome) html += `<p><span class="lbl">🎒 本週帶回：</span>${bringHome}</p>`;
+    if (bringNext) html += `<p><span class="lbl">📅 下週攜帶：</span>${bringNext}</p>`;
+  }
+  if (homework) html += `<br><p><span class="lbl">✏️ 本週作業：</span>${homework}</p>`;
+
+  const videoHTML = buildGroupsHTML('video-groups');
+  if (videoHTML) html += `<br><p><span class="lbl">🎬 影片資源：</span></p>` + videoHTML;
+
+  const songHTML = buildGroupsHTML('song-groups');
+  if (songHTML) html += `<br><p><span class="lbl">🎵 歌曲資源：</span></p>` + songHTML;
+
+  document.getElementById('preview-box').innerHTML = html;
+  showTab('preview');
+}
+
+function copyText() {
+  const text = document.getElementById('preview-box').innerText;
+  navigator.clipboard.writeText(text).then(() => {
+    const btn = document.querySelector('.btn-row .action-btn');
+    const orig = btn.textContent;
+    btn.textContent = '✓ 已複製！';
+    setTimeout(() => btn.textContent = orig, 2000);
+  });
+}
+
+// 預填範例資料
+window.addEventListener('load', () => {
+  document.getElementById('date').value = '2025年6月 第9週';
+  document.getElementById('class-name').value = '中班';
+  document.getElementById('vocab').value = 'sing唱歌, dance跳舞, do yoga做瑜珈, play dress up玩扮演遊戲';
+  document.getElementById('teacher-note').value = '孩子們做Show and Tell 愈來愈有信心，請多多讚美孩子的努力。';
+  document.getElementById('bring-home').value = 'We Are Friends課本、ABC字母本、數字學習單';
+  document.getElementById('bring-next').value = '課本和ABC字母本（下週一）';
+  document.getElementById('homework').value = '圈字作業：with';
+
+  addLetter('W w', 'watermelon 西瓜');
+  addLetter('X x', 'mix 攪拌');
+  addSentence('This is my friend _____.', '這是我的朋友——。');
+  addSentence('We like to _____ together.', '我們喜歡一起做——。');
+
+  addGroup('video-groups', 'K2 L9 課程影片', [
+    { cat: '動畫', label: 'We Are Friends Animation', url: 'https://youtube.com/shorts/ug7ebYDt_1A' },
+    { cat: '生字', label: 'K2 L9 Sight Words', url: 'https://youtu.be/ImIH51sACTw?si=QoTSedzFmRIQgXZI' },
+    { cat: '播放清單', label: '中班課本播放清單', url: 'https://m.youtube.com/playlist?list=PLBi0BEvIKv43KVSSkugafTFCw2lq' },
+  ]);
+  addGroup('video-groups', 'Sight Words 影片', [
+    { cat: 'K8', label: 'K8 Sight Words Song', url: 'https://youtu.be/OAI4_Qa3Ls8?si=4uUsklP7lXB3tfqE' },
+    { cat: 'K9', label: 'K9 Sight Words Song', url: 'https://youtu.be/KzKvpTa1S2w?si=9SyGVCcpmXF63qQT' },
+  ]);
+
+  addGroup('song-groups', '字母歌曲', [
+    { cat: '字母W', label: 'W Watermelon Song', url: 'https://www.youtube.com/watch?v=4f8U7IekAP0' },
+    { cat: '字母W', label: 'Letter W Song', url: 'https://www.youtube.com/watch?v=SssyojxK6P4' },
+    { cat: '字母X', label: 'Letter X Mix Song', url: 'https://youtu.be/klQaG2W0xcc' },
+    { cat: '字母X', label: 'Letter X Song', url: 'https://www.youtube.com/watch?v=YOBxDKIuPTM' },
+  ]);
+  addGroup('song-groups', '主題歌曲', [
+    { cat: '主題', label: 'This Is The Way We Make Friends', url: 'https://www.youtube.com/watch?v=AT8qLCmseuE' },
+    { cat: '主題', label: 'Friends, Friends 123', url: 'https://www.youtube.com/watch?v=QaITh9NEQ38' },
+    { cat: '節慶', label: 'Row the Dragon Boat', url: 'https://youtube.com/shorts/6xr6Nuvways' },
+  ]);
+  addGroup('song-groups', '拼音歌曲', [
+    { cat: '短母音O', label: 'Short Vowel O Song', url: 'https://www.youtube.com/watch?v=NFe1JXK8nT4' },
+  ]);
+});
+</script>
+</body>
+</html>
