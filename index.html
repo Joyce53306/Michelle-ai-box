@@ -19,21 +19,7 @@
             border: 2px solid rgba(255, 255, 255, 0.6);
             box-shadow: 0 4px 20px -2px rgba(148, 163, 184, 0.1);
         }
-        /* 膠囊主要按鈕（亮眼藍） */
-        .joyce-btn {
-            background: linear-gradient(135deg, #38bdf8 0%, #0ea5e9 100%);
-            color: white !important;
-            border-radius: 9999px;
-            box-shadow: 0 4px 12px rgba(14, 165, 233, 0.15);
-            transition: all 0.25s ease;
-            display: block;
-        }
-        .joyce-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 16px rgba(14, 165, 233, 0.25);
-            filter: brightness(1.05);
-        }
-        /* 膠囊次要按鈕（溫柔白） */
+        /* 膠囊按鈕（溫柔白） */
         .joyce-btn-secondary {
             background: #ffffff;
             color: #0284c7;
@@ -89,27 +75,24 @@
             <div class="joyce-card rounded-3xl p-6 flex flex-col justify-between col-span-1 lg:col-span-2 xl:col-span-3">
                 <div>
                     <div class="flex items-center gap-2 mb-2">
-                        <span class="text-xl">🎮</span>
-                        <h3 class="font-bold text-slate-800 text-base">課堂互動遊戲基地</h3>
+                        <span class="text-xl">🔤</span>
+                        <h3 class="font-bold text-slate-800 text-base">Alphabet 互動遊戲</h3>
                     </div>
-                    <p class="text-xs text-slate-500 leading-relaxed mb-6">點擊開啟你在 GitHub 做好的互動遊戲，上課投影或用平板給孩子練習、進行小組加分超方便！</p>
+                    <p class="text-xs text-slate-500 leading-relaxed mb-6">字母基礎練習。第一列排列：小班 ➔ 中班 A ➔ 中班 B ➔ 大班。</p>
                 </div>
                 
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
                     <a href="https://joyce53306.github.io/Small-Class-Sentences-Practicess/" target="_blank" class="joyce-btn-secondary text-center text-xs py-3 font-bold tracking-wide">
-                        🧸 小班常規遊戲
+                        小 (alphabet-match)
                     </a>
-                    
                     <a href="https://joyce53306.github.io/mid-class-english/" target="_blank" class="joyce-btn-secondary text-center text-xs py-3 font-bold tracking-wide">
-                        🎈 中班 A 句子複習
+                        中 A (alphabet-pair-match)
                     </a>
-                    
                     <a href="https://joyce53306.github.io/mid-class-english-b/" target="_blank" class="joyce-btn-secondary text-center text-xs py-3 font-bold tracking-wide">
-                        🍀 中班 B 遊戲
+                        中 B (phonics-hero)
                     </a>
-                    
-                    <a href="https://joyce53306.github.io/big-class-english/" target="_blank" class="joyce-btn text-center text-xs py-3 font-bold tracking-wide">
-                        🚀 大班 Phonics Level Up!
+                    <a href="https://joyce53306.github.io/big-class-english/" target="_blank" class="joyce-btn-secondary text-center text-xs py-3 font-bold tracking-wide">
+                        大 (phonics-level-up)
                     </a>
                 </div>
             </div>
@@ -117,14 +100,31 @@
             <div class="joyce-card rounded-3xl p-6 flex flex-col justify-between">
                 <div>
                     <div class="flex items-center gap-2 mb-2">
-                        <span class="text-xl">🎈</span>
-                        <h3 class="font-bold text-slate-800 text-base">Phonics & Sight Words 遊戲</h3>
+                        <span class="text-xl">📚</span>
+                        <h3 class="font-bold text-slate-800 text-base">Phonics & Sight Words</h3>
                     </div>
-                    <p class="text-xs text-slate-500 leading-relaxed mb-6">針對 2-6 歲設計的常用字翻牌與長短母音大冒險遊戲，激發孩子的 Oral Output。</p>
+                    <p class="text-xs text-slate-500 leading-relaxed mb-6">針對進階長短母音拼讀與常用字設計，激發幼兒的 Oral Output 潛能。</p>
                 </div>
-                <div class="grid grid-cols-2 gap-2">
-                    <a href="#" class="joyce-btn-secondary text-center text-xs py-2.5 font-bold">Sight Words Game</a>
-                    <a href="#" class="joyce-btn-secondary text-center text-xs py-2.5 font-bold">Vowels Game</a>
+                <div class="grid grid-cols-2 gap-2.5">
+                    <a href="#" class="joyce-btn-secondary text-center text-xs py-2.5 font-bold">短母音</a>
+                    <a href="#" class="joyce-btn-secondary text-center text-xs py-2.5 font-bold">長母音</a>
+                    <a href="#" class="joyce-btn-secondary text-center text-xs py-2.5 font-bold">中班常用字</a>
+                    <a href="#" class="joyce-btn-secondary text-center text-xs py-2.5 font-bold">大中班複習</a>
+                </div>
+            </div>
+
+            <div class="joyce-card rounded-3xl p-6 flex flex-col justify-between">
+                <div>
+                    <div class="flex items-center gap-2 mb-2">
+                        <span class="text-xl">🚀</span>
+                        <h3 class="font-bold text-slate-800 text-base">David 互動基地</h3>
+                    </div>
+                    <p class="text-xs text-slate-500 leading-relaxed mb-6">圍繞靈魂人物 David 的課堂常規與主題句型互動小遊戲。</p>
+                </div>
+                <div class="grid grid-cols-1 gap-2">
+                    <a href="https://joyce53306.github.io/Small-Class-Sentences-Practicess/" target="_blank" class="joyce-btn-secondary text-center text-xs py-2.5 font-bold">小班句型練習</a>
+                    <a href="https://joyce53306.github.io/mid-class-english/" target="_blank" class="joyce-btn-secondary text-center text-xs py-2.5 font-bold">中班課本句子</a>
+                    <a href="https://joyce53306.github.io/big-class-english/" target="_blank" class="joyce-btn-secondary text-center text-xs py-2.5 font-bold">大班英語宇宙</a>
                 </div>
             </div>
 
@@ -132,39 +132,13 @@
                 <div>
                     <div class="flex items-center gap-2 mb-2">
                         <span class="text-xl">💌</span>
-                        <h3 class="font-bold text-slate-800 text-base">每月快訊 & 雙週小報產生器</h3>
+                        <h3 class="font-bold text-slate-800 text-base">親師雙週小報產生器</h3>
                     </div>
-                    <p class="text-xs text-slate-500 leading-relaxed mb-6">輸入本月教學進度，自動為 Swan / Kangaroo 班生成親切專業的快訊與親師聯絡小語。</p>
+                    <p class="text-xs text-slate-500 leading-relaxed mb-6">輸入本月進度，5秒自動為家長編寫充滿溫度的每月快訊與小報小語。</p>
                 </div>
                 <div class="grid grid-cols-2 gap-2">
-                    <a href="https://poe.com" target="_blank" class="joyce-btn-secondary text-center text-xs py-2.5 font-bold">Poe 應用版</a>
-                    <a href="https://gemini.google.com" target="_blank" class="joyce-btn-secondary text-center text-xs py-2.5 font-bold">Gemini 工具</a>
-                </div>
-            </div>
-
-            <div class="joyce-card rounded-3xl p-6 flex flex-col justify-between">
-                <div>
-                    <div class="flex items-center gap-2 mb-2">
-                        <span class="text-xl">🎙️</span>
-                        <h3 class="font-bold text-slate-800 text-base">David 冒險與廣播腳本 AI</h3>
-                    </div>
-                    <p class="text-xs text-slate-500 leading-relaxed mb-6">自動生成 Joyce's Secret Time 故事電台腳本，將單字融入 David 探險與自創 Chants 歌詞中。</p>
-                </div>
-                <div class="grid grid-cols-1">
-                    <a href="https://gemini.google.com" target="_blank" class="joyce-btn-secondary text-center text-sm py-2.5 font-bold">Gemini 備課助理</a>
-                </div>
-            </div>
-
-            <div class="joyce-card rounded-3xl p-6 flex flex-col justify-between">
-                <div>
-                    <div class="flex items-center gap-2 mb-2">
-                        <span class="text-xl">🔄</span>
-                        <h3 class="font-bold text-slate-800 text-base">David 日常用語大轉盤</h3>
-                    </div>
-                    <p class="text-xs text-slate-500 leading-relaxed mb-6">上課轉到什麼生活情境，全班配合 TPR 肢體動作大聲說出對應的日常美語！</p>
-                </div>
-                <div class="grid grid-cols-1">
-                    <button class="bg-slate-100 text-slate-400 border border-dashed border-slate-300 text-xs py-2.5 rounded-full font-bold cursor-not-allowed">創意製作中 🚧</button>
+                    <a href="https://poe.com" target="_blank" class="joyce-btn-secondary text-center text-xs py-2.5 font-bold">Poe 版</a>
+                    <a href="https://gemini.google.com" target="_blank" class="joyce-btn-secondary text-center text-xs py-2.5 font-bold">Gemini 版</a>
                 </div>
             </div>
 
