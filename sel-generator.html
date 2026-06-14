@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SEL 提問精靈 — 繪本 Q&A 生成</title>
+<script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+<style>
+body { background: linear-gradient(135deg, #f8fafc 0%, #f0fdf4 50%, #f8fafc 100%); font-family: system-ui, -apple-system, sans-serif; color: #1e293b; }
+.card { background: rgba(255,255,255,0.9); border: 1.5px solid #e2e8f0; border-radius: 1rem; box-shadow: 0 4px 15px -3px rgba(148,163,184,0.12); }
+label.field-label { font-size: 0.7rem; font-weight: 700; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.05em; display: block; margin-bottom: 4px; }
+input, select, textarea { width: 100%; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 0.65rem; padding: 0.55rem 0.75rem; font-size: 0.875rem; color: #1e293b; font-family: inherit; resize: none; }
+input:focus, select:focus, textarea:focus { outline: none; border-color: #4ade80; }
+.gen-btn { background: #0d9488; color: #fff; border: none; border-radius: 0.75rem; padding: 0.8rem; font-size: 0.95rem; font-weight: 600; cursor: pointer; width: 100%; display: flex; align-items: center; justify-content: center; gap: 0.5rem; transition: background 0.15s; }
+.gen-btn:hover { background: #0f766e; }
+.gen-btn:disabled { background: #cbd5e1; cursor: not-allowed; }
+.age-btn { padding: 5px 14px; border: 1px solid #e2e8f0; border-radius: 1rem; font-size: 0.75rem; font-weight: 500; cursor: pointer; background: none; color: #64748b; transition: all 0.15s; }
+.age-btn.active { background: #0d9488; color: #fff; border-color: #0d9488; }
+.sel-skill { border: 1.5px solid #e2e8f0; border-radius: 0.65rem; padding: 8px 4px; font-size: 0.7rem; font-weight: 600; cursor: pointer; text-align: center; background: #f8fafc; color: #64748b; transition: all 0.15s; }
+.sel-skill.active { border-color: #0d9488; background: #f0fdf4; color: #0f766e; }
+.q-item { padding: 8px 0; border-bottom: 1px solid #f1f5f9; display: flex; gap: 8px; align-items: flex-start; font-size: 0.85rem; line-height: 1.6; }
+.q-item:last-child { border-bottom: none; }
+.q-badge { font-size: 0.65rem; font-weight: 700; border-radius: 4px; padding: 2px 6px; flex-shrink: 0; margin-top: 2px; white-space: nowrap; }
+.badge-comp { background: #ede9fe; color: #6d28d9; }
+.badge-sel { background: #d1fae5; color: #065f46; }
+.copy-btn { font-size: 0.75rem; color: #0d9488; border: 1px solid #99f6e4; border-radius: 0.5rem; padding: 4px 10px; cursor: pointer; background: none; }
+.copy-btn:hover { background: #f0fdf4; }
+.spinner { display: inline-block; width: 16px; height: 16px; border: 2px solid rgba(255,255,255,0.4); border-top-color: #fff; border-radius: 50%; animation: spin 0.7s linear infinite; vertical-align: middle; }
+@keyframes spin { to { transform: rotate(360deg); } }
+.back-btn { display: inline-flex; align-items: center; gap: 5px; color: #0d9488; font-size: 0.85rem; font-weight: 500; text-decoration: none; margin-bottom: 1.5rem; }
+.back-btn:hover { text-decoration: underline; }
+</style>
+</head>
+<body class="min-h-screen p-4 md:p-8">
+<div class="max-w-2xl mx-auto">
+
+  <a href="index.html" class="back-btn">← 返回 Joyce's ABC Base</a>
+
+  <div class="card p-6 mb-5">
+    <div class="flex items-center gap-3 mb-1">
+      <div class="w-10 h-10 bg-teal-100 text-teal-600 rounded-xl flex items-center justify-center text-xl">📖</div>
+      <div>
+        <h1 class="text-xl font-extrabold text-slate-800">SEL 提問精靈</h1>
+        <p class="text-xs text-slate-400">繪本 Q&A × 社會情緒學習提問生成，適合 3-6 歲</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="card p-5 mb-4">
+    <div class="mb-3">
+      <label class="field-label">繪本名稱或故事文本</label>
+      <textarea id="bookText" rows="4" placeholder="例：《猜猜我有多愛你》— 小兔子和大兔子比賽誰愛誰多，小兔子說：我愛你的程度，就是我的手臂能張開的那麼多...
+
+或直接貼入故事段落文字"></textarea>
+    </div>
+
+    <div class="mb-3">
+      <label class="field-label">適合年齡</label>
+      <div class="flex gap-2 flex-wrap mt-1">
+        <button class="age-btn" onclick="selAge(this,'2-3歲（幼幼班）')">2-3歲</button>
+        <button class="age-btn active" onclick="selAge(this,'3-4歲（小班）')">3-4歲</button>
+        <button class="age-btn" onclick="selAge(this,'4-5歲（中班）')">4-5歲</button>
+        <button class="age-btn" onclick="selAge(this,'5-6歲（大班）')">5-6歲</button>
+      </div>
+    </div>
+
+    <div class="mb-3">
+      <label class="field-label">SEL 核心技能（可複選）</label>
+      <div class="grid grid-cols-3 gap-2 mt-1">
+        <div class="sel-skill active" onclick="this.classList.toggle('active')">❤️ 情緒認識</div>
+        <div class="sel-skill" onclick="this.classList.toggle('active')">🤝 同理心</div>
+        <div class="sel-skill" onclick="this.classList.toggle('active')">👥 人際關係</div>
+        <div class="sel-skill" onclick="this.classList.toggle('active')">🧩 問題解決</div>
+        <div class="sel-skill" onclick="this.classList.toggle('active')">🪞 自我認識</div>
+        <div class="sel-skill" onclick="this.classList.toggle('active')">🌊 情緒調節</div>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-2 gap-3 mb-4">
+      <div>
+        <label class="field-label">提問數量</label>
+        <select id="count">
+          <option value="5">5 題</option>
+          <option value="8" selected>8 題</option>
+          <option value="12">12 題</option>
+          <option value="15">15 題</option>
+        </select>
+      </div>
+      <div>
+        <label class="field-label">提問語言</label>
+        <select id="lang">
+          <option value="中文">中文問題</option>
+          <option value="英文">英文問題</option>
+          <option value="中英對照">中英對照</option>
+        </select>
+      </div>
+    </div>
+
+    <button class="gen-btn" id="genBtn" onclick="generate()">
+      ✨ 生成 SEL 提問清單
+    </button>
+  </div>
+
+  <div id="outZone" style="display:none" class="card p-5">
+    <div class="flex items-center justify-between mb-4">
+      <h2 class="font-bold text-slate-700">📋 SEL 提問清單</h2>
+      <button class="copy-btn" onclick="copyAll()">📋 複製全部</button>
+    </div>
+
+    <div class="mb-4">
+      <div class="text-xs font-bold text-purple-600 mb-2">📖 理解提問（故事內容）</div>
+      <div id="compList"></div>
+    </div>
+
+    <div class="border-t border-slate-100 pt-4">
+      <div class="text-xs font-bold text-teal-600 mb-2">❤️ SEL 情感提問</div>
+      <div id="selList"></div>
+    </div>
+
+    <div id="rawOut" style="display:none"></div>
+  </div>
+
+</div>
+<script>
+let currentAge = '3-4歲（小班）';
+
+function selAge(el, age) {
+  currentAge = age;
+  document.querySelectorAll('.age-btn').forEach(b => b.classList.remove('active'));
+  el.classList.add('active');
+}
+
+async function generate() {
+  const text = document.getElementById('bookText').value.trim();
+  if (!text) { alert('請先輸入繪本名稱或故事文本！'); return; }
+
+  const skills = [...document.querySelectorAll('.sel-skill.active')].map(el => el.textContent.replace(/^[^\w\u4e00-\u9fff]*/,'')).join('、');
+  const count = document.getElementById('count').value;
+  const lang = document.getElementById('lang').value;
+
+  const prompt = `你是一位精通 SEL（社會情緒學習）的幼兒園教育專家。請根據以下繪本文本，生成適合 ${currentAge} 的提問清單。
+
+繪本內容：${text}
+SEL 核心技能：${skills || '情緒認識、同理心'}
+提問語言：${lang}
+提問數量：${count} 題（理解題佔 40%，SEL題佔 60%）
+
+只回 JSON 格式，不要其他文字：
+{"comprehension":[{"q":"理解類問題","type":"理解"}],"sel":[{"q":"SEL情感問題","type":"SEL技能名稱"}]}
+
+要求：
+- 理解題：針對故事情節、角色、事件
+- SEL題：引導孩子反思情緒、換位思考、聯結自身經驗
+- 語言簡單，適合口語回答，不要是/否題`;
+
+  const btn = document.getElementById('genBtn');
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spinner"></span> 分析文本中...';
+  document.getElementById('outZone').style.display = 'block';
+  document.getElementById('compList').innerHTML = '<p class="text-sm text-slate-400 py-2">⏳ 生成中...</p>';
+  document.getElementById('selList').innerHTML = '';
+
+  try {
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ model: 'claude-sonnet-4-6', max_tokens: 1000, messages: [{ role: 'user', content: prompt }] })
+    });
+    const data = await res.json();
+    const raw = data.content.map(i => i.text || '').join('').replace(/```json|```/g, '').trim();
+    const parsed = JSON.parse(raw);
+
+    const compEl = document.getElementById('compList');
+    const selEl = document.getElementById('selList');
+
+    compEl.innerHTML = (parsed.comprehension || []).map(q => `
+      <div class="q-item">
+        <span class="q-badge badge-comp">理解</span>
+        <span>${q.q}</span>
+      </div>`).join('');
+
+    selEl.innerHTML = (parsed.sel || []).map(q => `
+      <div class="q-item">
+        <span class="q-badge badge-sel">${q.type}</span>
+        <span>${q.q}</span>
+      </div>`).join('');
+
+    const allQ = [...(parsed.comprehension||[]),...(parsed.sel||[])].map((q,i)=>`${i+1}. [${q.type}] ${q.q}`).join('\n');
+    document.getElementById('rawOut').textContent = allQ;
+  } catch(e) {
+    document.getElementById('compList').innerHTML = '<p class="text-sm text-red-400">生成失敗，請確認文本已填寫並重試。</p>';
+  }
+
+  btn.disabled = false;
+  btn.innerHTML = '✨ 生成 SEL 提問清單';
+}
+
+function copyAll() {
+  navigator.clipboard.writeText(document.getElementById('rawOut').textContent).then(() => {
+    const btn = event.currentTarget;
+    const orig = btn.innerHTML;
+    btn.innerHTML = '✅ 已複製！';
+    setTimeout(() => btn.innerHTML = orig, 1500);
+  });
+}
+</script>
+</body>
+</html>
