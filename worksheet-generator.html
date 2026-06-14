@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>學習單生成器</title>
+<script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+<style>
+body{background:linear-gradient(135deg,#f8fafc 0%,#fef9ee 50%,#f8fafc 100%);font-family:system-ui,-apple-system,sans-serif;color:#1e293b}
+.card{background:rgba(255,255,255,0.92);border:1.5px solid #e2e8f0;border-radius:1rem;box-shadow:0 4px 15px -3px rgba(148,163,184,0.12)}
+label.fl{font-size:0.7rem;font-weight:700;color:#94a3b8;text-transform:uppercase;letter-spacing:0.05em;display:block;margin-bottom:4px}
+input,select,textarea{width:100%;background:#f8fafc;border:1px solid #e2e8f0;border-radius:0.65rem;padding:0.55rem 0.75rem;font-size:0.875rem;color:#1e293b;font-family:inherit;resize:none}
+input:focus,select:focus,textarea:focus{outline:none;border-color:#f59e0b}
+.gen-btn{background:#d97706;color:#fff;border:none;border-radius:0.75rem;padding:0.8rem;font-size:0.95rem;font-weight:600;cursor:pointer;width:100%;display:flex;align-items:center;justify-content:center;gap:0.5rem;transition:background 0.15s}
+.gen-btn:hover{background:#b45309}
+.gen-btn:disabled{background:#cbd5e1;cursor:not-allowed}
+.print-btn{background:#0d9488;color:#fff;border:none;border-radius:0.75rem;padding:0.7rem 1.25rem;font-size:0.875rem;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:6px}
+.print-btn:hover{background:#0f766e}
+.type-btn{border:1.5px solid #e2e8f0;border-radius:0.65rem;padding:9px 6px;font-size:0.75rem;font-weight:600;cursor:pointer;text-align:center;background:#f8fafc;color:#64748b;transition:all 0.15s}
+.type-btn.active{border-color:#d97706;background:#fffbeb;color:#92400e}
+.spinner{display:inline-block;width:16px;height:16px;border:2px solid rgba(255,255,255,0.4);border-top-color:#fff;border-radius:50%;animation:spin 0.7s linear infinite;vertical-align:middle}
+@keyframes spin{to{transform:rotate(360deg)}}
+.back-btn{display:inline-flex;align-items:center;gap:5px;color:#d97706;font-size:0.85rem;font-weight:500;text-decoration:none;margin-bottom:1.5rem}
+.back-btn:hover{text-decoration:underline}
+.ws-preview{background:#fff;border:2px solid #e2e8f0;border-radius:0.75rem;padding:2rem;min-height:200px;font-size:0.9rem;line-height:2}
+
+/* 列印樣式 */
+@media print{
+  .no-print{display:none!important}
+  body{background:#fff;padding:0;margin:0}
+  .ws-preview{border:none;padding:1.5cm;box-shadow:none}
+  .card{box-shadow:none;border:none}
+}
+</style>
+</head>
+<body class="min-h-screen p-4 md:p-8">
+<div class="max-w-2xl mx-auto">
+
+<a href="index.html" class="back-btn no-print">← 返回 Joyce's ABC Base</a>
+
+<div class="card p-6 mb-5 no-print">
+  <div class="flex items-center gap-3 mb-1">
+    <div class="w-10 h-10 bg-amber-100 text-amber-600 rounded-xl flex items-center justify-center text-xl">📄</div>
+    <div>
+      <h1 class="text-xl font-extrabold text-slate-800">學習單生成器</h1>
+      <p class="text-xs text-slate-400">3-6 歲 ESL 學習者 · 有趣適齡的英語學習單</p>
+    </div>
+  </div>
+</div>
+
+<div class="card p-5 mb-4 no-print">
+  <div class="grid grid-cols-2 gap-3 mb-3">
+    <div>
+      <label class="fl">本週主題</label>
+      <input type="text" id="ws-theme" placeholder="例：Animals / Colors / Food">
+    </div>
+    <div>
+      <label class="fl">目標單字</label>
+      <input type="text" id="ws-vocab" placeholder="例：cat, dog, bird, fish">
+    </div>
+  </div>
+
+  <div class="grid grid-cols-2 gap-3 mb-3">
+    <div>
+      <label class="fl">適合年齡</label>
+      <select id="ws-age">
+        <option value="3-4歲（幼幼/小班）">3-4歲（幼幼/小班）</option>
+        <option value="4-5歲（小/中班）" selected>4-5歲（小/中班）</option>
+        <option value="5-6歲（中/大班）">5-6歲（中/大班）</option>
+      </select>
+    </div>
+    <div>
+      <label class="fl">目標句型（可選）</label>
+      <input type="text" id="ws-sentence" placeholder="例：I see a ___.">
+    </div>
+  </div>
+
+  <div class="mb-3">
+    <label class="fl">學習單類型（可複選）</label>
+    <div class="grid grid-cols-3 gap-2 mt-1">
+      <div class="type-btn active" onclick="this.classList.toggle('active')">✏️ 描寫練習</div>
+      <div class="type-btn active" onclick="this.classList.toggle('active')">🔗 連連看</div>
+      <div class="type-btn" onclick="this.classList.toggle('active')">⭕ 圈選正確</div>
+      <div class="type-btn" onclick="this.classList.toggle('active')">🎨 塗色題</div>
+      <div class="type-btn" onclick="this.classList.toggle('active')">🔤 填填看</div>
+      <div class="type-btn" onclick="this.classList.toggle('active')">✂️ 剪貼配對</div>
+    </div>
+  </div>
+
+  <div class="mb-4">
+    <label class="fl">趣味主題設定（可選）</label>
+    <select id="ws-fun">
+      <option value="一般學習單">一般學習單</option>
+      <option value="動物森林冒險主題">🌿 動物森林冒險</option>
+      <option value="太空探險主題">🚀 太空探險</option>
+      <option value="海底世界主題">🌊 海底世界</option>
+      <option value="魔法學校主題">🧙 魔法學校</option>
+      <option value="超級英雄主題">🦸 超級英雄</option>
+    </select>
+  </div>
+
+  <button class="gen-btn" id="ws-btn" onclick="generate()">📄 生成學習單內容</button>
+</div>
+
+<div id="ws-out" style="display:none">
+  <div class="flex items-center justify-between mb-3 no-print">
+    <h2 class="font-bold text-slate-700">📄 學習單預覽</h2>
+    <div class="flex gap-2">
+      <button onclick="copyEl('ws-content')" class="text-xs text-amber-600 border border-amber-200 rounded-lg px-3 py-1.5 hover:bg-amber-50">📋 複製</button>
+      <button class="print-btn" onclick="window.print()">🖨️ 列印 / 存 PDF</button>
+    </div>
+  </div>
+  <div class="ws-preview" id="ws-content"></div>
+</div>
+
+</div>
+<script>
+async function generate() {
+  const theme = document.getElementById('ws-theme').value || '（未填）';
+  const vocab = document.getElementById('ws-vocab').value || '（未填）';
+  const age = document.getElementById('ws-age').value;
+  const sentence = document.getElementById('ws-sentence').value;
+  const fun = document.getElementById('ws-fun').value;
+  const types = [...document.querySelectorAll('.type-btn.active')].map(el => el.textContent.trim()).join('、') || '連連看、描寫練習';
+
+  const prompt = `你是一位專業幼兒美語老師，幫我設計一份適合 ${age} ESL 學習者的英語學習單。
+
+主題：${theme}
+目標單字：${vocab}
+${sentence ? '句型：' + sentence : ''}
+學習單類型：${types}
+趣味包裝：${fun}
+
+請生成完整的學習單內容，格式如下：
+
+━━━━━━━━━━━━━━━━━━━━
+📚 主題標題（英文 + 中文）
+姓名：____________  日期：____________  班級：____________
+━━━━━━━━━━━━━━━━━━━━
+
+（依照選擇的類型，生成每個題型，例如：）
+
+【題型一：連連看】
+說明：Look and match! 看圖連線
+（列出左欄英文單字和右欄中文或圖示說明，讓老師知道如何設計）
+
+【題型二：描寫練習】
+說明：Trace and write! 描寫單字
+（列出要描寫的單字，提供虛線格子說明）
+
+（以此類推...）
+
+━━
+⭐ 老師評語：____________  🌟🌟🌟🌟🌟
+━━━━━━━━━━━━━━━━━━━━
+
+要求：
+- 用語簡單，符合 ${age} 程度
+- 指令清楚（中英文）
+- 融入${fun}的有趣元素
+- 每題型有明確的學習目標說明`;
+
+  const btn = document.getElementById('ws-btn');
+  btn.disabled = true; btn.innerHTML = '<span class="spinner"></span> AI 設計中...';
+  document.getElementById('ws-out').style.display = 'block';
+  document.getElementById('ws-content').innerHTML = '<p style="color:#94a3b8;padding:1rem">⏳ 生成學習單中...</p>';
+
+  try {
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ model:'claude-sonnet-4-6', max_tokens:1000, messages:[{role:'user',content:prompt}] })
+    });
+    const data = await res.json();
+    const text = data.content.map(i=>i.text||'').join('');
+    document.getElementById('ws-content').innerHTML = `<pre style="white-space:pre-wrap;font-family:inherit;font-size:0.875rem;line-height:2;color:#334155">${text}</pre>`;
+  } catch(e) {
+    document.getElementById('ws-content').innerHTML = '<p style="color:#ef4444">生成失敗，請重試。</p>';
+  }
+  btn.disabled = false; btn.innerHTML = '📄 生成學習單內容';
+}
+
+function copyEl(id) {
+  const text = document.getElementById(id).textContent;
+  navigator.clipboard.writeText(text).then(() => {
+    const btn = event.currentTarget; const orig = btn.innerHTML;
+    btn.innerHTML = '✅ 已複製！'; setTimeout(() => btn.innerHTML = orig, 1500);
+  });
+}
+</script>
+</body>
+</html>
