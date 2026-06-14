@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>英語字卡生成器</title>
+<script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+<style>
+body{background:linear-gradient(135deg,#f8fafc 0%,#f0fdf4 50%,#f8fafc 100%);font-family:system-ui,-apple-system,sans-serif;color:#1e293b}
+.card{background:rgba(255,255,255,0.92);border:1.5px solid #e2e8f0;border-radius:1rem;box-shadow:0 4px 15px -3px rgba(148,163,184,0.12)}
+label.fl{font-size:0.7rem;font-weight:700;color:#94a3b8;text-transform:uppercase;letter-spacing:0.05em;display:block;margin-bottom:4px}
+input,select,textarea{width:100%;background:#f8fafc;border:1px solid #e2e8f0;border-radius:0.65rem;padding:0.55rem 0.75rem;font-size:0.875rem;color:#1e293b;font-family:inherit;resize:none}
+input:focus,select:focus,textarea:focus{outline:none;border-color:#4ade80}
+.gen-btn{background:#16a34a;color:#fff;border:none;border-radius:0.75rem;padding:0.8rem;font-size:0.95rem;font-weight:600;cursor:pointer;width:100%;display:flex;align-items:center;justify-content:center;gap:0.5rem;transition:background 0.15s}
+.gen-btn:hover{background:#15803d}
+.gen-btn:disabled{background:#cbd5e1;cursor:not-allowed}
+.print-btn{background:#0d9488;color:#fff;border:none;border-radius:0.75rem;padding:0.7rem 1.25rem;font-size:0.875rem;font-weight:600;cursor:pointer;display:inline-flex;align-items:center;gap:6px}
+.print-btn:hover{background:#0f766e}
+.style-btn{border:1.5px solid #e2e8f0;border-radius:0.65rem;padding:10px 8px;font-size:0.8rem;font-weight:600;cursor:pointer;text-align:center;background:#f8fafc;color:#64748b;transition:all 0.15s}
+.style-btn.active{border-color:#16a34a;background:#f0fdf4;color:#166534}
+.spinner{display:inline-block;width:16px;height:16px;border:2px solid rgba(255,255,255,0.4);border-top-color:#fff;border-radius:50%;animation:spin 0.7s linear infinite;vertical-align:middle}
+@keyframes spin{to{transform:rotate(360deg)}}
+.back-btn{display:inline-flex;align-items:center;gap:5px;color:#16a34a;font-size:0.85rem;font-weight:500;text-decoration:none;margin-bottom:1.5rem}
+.back-btn:hover{text-decoration:underline}
+
+/* 字卡預覽 */
+.cards-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;padding:1rem}
+.flash-card{background:#fff;border-radius:0.75rem;overflow:hidden;aspect-ratio:3/4;display:flex;flex-direction:column;border:2px solid #e2e8f0;position:relative}
+.flash-card.style-colorful{border-color:transparent}
+.card-img-wrap{flex:1;display:flex;align-items:center;justify-content:center;overflow:hidden;background:#f8fafc;position:relative}
+.card-img-wrap img{width:100%;height:100%;object-fit:cover}
+.card-img-wrap .emoji-icon{font-size:4rem;line-height:1}
+.card-img-wrap .cute-art{width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:3.5rem}
+.card-bottom{padding:8px 6px;text-align:center;background:#fff}
+.card-en{font-size:1.1rem;font-weight:800;color:#1e293b;line-height:1.2;text-transform:capitalize}
+.card-zh{font-size:0.7rem;color:#64748b;margin-top:2px}
+.card-phonics{font-size:0.65rem;color:#94a3b8;font-family:monospace}
+
+/* 彩色主題 */
+.style-colorful .card-bottom{color:#fff}
+.style-colorful .card-en{color:#fff}
+.style-colorful .card-zh{color:rgba(255,255,255,0.8)}
+
+/* 列印 A4 */
+@media print{
+  .no-print{display:none!important}
+  body{background:#fff;margin:0;padding:0}
+  .print-area{padding:0.5cm}
+  .cards-grid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:8px;
+    padding:0.5cm;
+    page-break-inside:avoid
+  }
+  .flash-card{
+    border:1.5px solid #e2e8f0;
+    break-inside:avoid;
+    page-break-inside:avoid
+  }
+  .card{box-shadow:none;border:none}
+  .print-area{page-break-inside:avoid}
+}
+
+.size-btn{padding:5px 12px;border:1px solid #e2e8f0;border-radius:1rem;font-size:0.75rem;cursor:pointer;background:none;color:#64748b;transition:all 0.15s}
+.size-btn.active{background:#16a34a;color:#fff;border-color:#16a34a}
+</style>
+</head>
+<body class="min-h-screen p-4 md:p-8">
+<div class="max-w-2xl mx-auto">
+
+<a href="index.html" class="back-btn no-print">← 返回 Joyce's ABC Base</a>
+
+<div class="card p-6 mb-5 no-print">
+  <div class="flex items-center gap-3 mb-1">
+    <div class="w-10 h-10 bg-green-100 text-green-600 rounded-xl flex items-center justify-center text-xl">🃏</div>
+    <div>
+      <h1 class="text-xl font-extrabold text-slate-800">英語字卡生成器</h1>
+      <p class="text-xs text-slate-400">輸入單字 → 自動排版 A4 可列印字卡，含圖片</p>
+    </div>
+  </div>
+</div>
+
+<div class="card p-5 mb-4 no-print">
+  <div class="mb-3">
+    <label class="fl">輸入單字（逗號分隔，可加中文翻譯）</label>
+    <textarea id="vocab-input" rows="3" placeholder="例：cat 貓, dog 狗, bird 鳥, fish 魚, rabbit 兔子, elephant 大象, lion 獅子, tiger 老虎, monkey 猴子, bear 熊"></textarea>
+    <p class="text-xs text-slate-400 mt-1">每行最多 9 張（A4 每頁 9 格），建議一次 6-9 個單字</p>
+  </div>
+
+  <div class="mb-3">
+    <label class="fl">快速填入範例</label>
+    <div class="flex flex-wrap gap-2">
+      <button onclick="fillEx('animals')" class="text-xs bg-green-50 text-green-700 border border-green-200 rounded-full px-3 py-1 cursor-pointer hover:bg-green-100">🐾 動物</button>
+      <button onclick="fillEx('colors')" class="text-xs bg-green-50 text-green-700 border border-green-200 rounded-full px-3 py-1 cursor-pointer hover:bg-green-100">🎨 顏色</button>
+      <button onclick="fillEx('food')" class="text-xs bg-green-50 text-green-700 border border-green-200 rounded-full px-3 py-1 cursor-pointer hover:bg-green-100">🍎 食物</button>
+      <button onclick="fillEx('body')" class="text-xs bg-green-50 text-green-700 border border-green-200 rounded-full px-3 py-1 cursor-pointer hover:bg-green-100">👁️ 身體部位</button>
+      <button onclick="fillEx('numbers')" class="text-xs bg-green-50 text-green-700 border border-green-200 rounded-full px-3 py-1 cursor-pointer hover:bg-green-100">🔢 數字</button>
+    </div>
+  </div>
+
+  <div class="mb-3">
+    <label class="fl">圖片風格</label>
+    <div class="grid grid-cols-2 gap-2">
+      <div class="style-btn active" id="style-photo" onclick="selStyle('photo')">
+        📷 真實照片風格<br><span style="font-size:0.65rem;color:#94a3b8">使用 Unsplash 真實圖片</span>
+      </div>
+      <div class="style-btn" id="style-cute" onclick="selStyle('cute')">
+        🎨 可愛插圖風格<br><span style="font-size:0.65rem;color:#94a3b8">彩色 emoji + 漸層背景</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid grid-cols-2 gap-3 mb-3">
+    <div>
+      <label class="fl">顯示中文翻譯</label>
+      <select id="show-zh">
+        <option value="yes">顯示中文</option>
+        <option value="no">只顯示英文</option>
+      </select>
+    </div>
+    <div>
+      <label class="fl">字卡大小</label>
+      <select id="card-size">
+        <option value="3">每行 3 張（A4 標準）</option>
+        <option value="2">每行 2 張（大字卡）</option>
+        <option value="4">每行 4 張（小字卡）</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="mb-4">
+    <label class="fl">彩色主題</label>
+    <div class="flex gap-2 flex-wrap">
+      <button class="size-btn active" onclick="selTheme(this,'pastel')" data-theme="pastel">🌸 粉彩</button>
+      <button class="size-btn" onclick="selTheme(this,'bright')" data-theme="bright">🌈 鮮豔</button>
+      <button class="size-btn" onclick="selTheme(this,'mono')" data-theme="mono">⬜ 簡約白</button>
+      <button class="size-btn" onclick="selTheme(this,'ocean')" data-theme="ocean">🌊 海洋藍</button>
+    </div>
+  </div>
+
+  <button class="gen-btn" id="gen-btn" onclick="generate()">🃏 生成字卡</button>
+</div>
+
+<!-- 預覽區 -->
+<div id="card-out" style="display:none">
+  <div class="flex items-center justify-between mb-3 no-print">
+    <h2 class="font-bold text-slate-700">🃏 字卡預覽</h2>
+    <button class="print-btn" onclick="window.print()">🖨️ 列印 / 存 PDF</button>
+  </div>
+  <div class="card print-area" id="cards-wrap">
+    <div class="cards-grid" id="cards-grid"></div>
+  </div>
+  <p class="text-xs text-slate-400 mt-2 no-print">💡 列印時選「更多設定」→ 邊距設為「無」，效果最佳</p>
+</div>
+
+</div>
+<script>
+const EXAMPLES = {
+  animals:'cat 貓, dog 狗, bird 鳥, fish 魚, rabbit 兔子, elephant 大象, lion 獅子, tiger 老虎, monkey 猴子',
+  colors:'red 紅色, blue 藍色, yellow 黃色, green 綠色, purple 紫色, orange 橘色, pink 粉紅色, white 白色, black 黑色',
+  food:'apple 蘋果, banana 香蕉, milk 牛奶, bread 麵包, egg 蛋, cake 蛋糕, cookie 餅乾, juice 果汁, pizza 披薩',
+  body:'eyes 眼睛, nose 鼻子, mouth 嘴巴, ears 耳朵, hands 手, feet 腳, head 頭, hair 頭髮, belly 肚子',
+  numbers:'one 一, two 二, three 三, four 四, five 五, six 六, seven 七, eight 八, nine 九'
+};
+
+const EMOJIS = {
+  cat:'🐱',dog:'🐶',bird:'🐦',fish:'🐟',rabbit:'🐰',elephant:'🐘',lion:'🦁',tiger:'🐯',monkey:'🐵',bear:'🐻',
+  red:'🔴',blue:'🔵',yellow:'🟡',green:'🟢',purple:'🟣',orange:'🟠',pink:'🩷',white:'⬜',black:'⬛',
+  apple:'🍎',banana:'🍌',milk:'🥛',bread:'🍞',egg:'🥚',cake:'🎂',cookie:'🍪',juice:'🧃',pizza:'🍕',
+  eyes:'👀',nose:'👃',mouth:'👄',ears:'👂',hands:'👐',feet:'🦶',head:'🗣️',hair:'💇',belly:'🫃',
+  one:'1️⃣',two:'2️⃣',three:'3️⃣',four:'4️⃣',five:'5️⃣',six:'6️⃣',seven:'7️⃣',eight:'8️⃣',nine:'9️⃣',ten:'🔟',
+  sun:'☀️',moon:'🌙',star:'⭐',tree:'🌳',flower:'🌸',rain:'🌧️',cloud:'☁️',rainbow:'🌈',
+  car:'🚗',bus:'🚌',bike:'🚲',plane:'✈️',boat:'🚢',train:'🚂',
+  happy:'😊',sad:'😢',angry:'😠',scared:'😨',excited:'🤩',tired:'😴',
+  red_color:'🟥',blue_color:'🟦',
+};
+
+const THEMES = {
+  pastel:['#FFE4E1','#E1F5FE','#E8F5E9','#FFF9C4','#F3E5F5','#FCE4EC','#E0F2F1','#FFF3E0','#EDE7F6'],
+  bright:['#FF6B6B','#4ECDC4','#45B7D1','#96CEB4','#FFEAA7','#DDA0DD','#98D8C8','#F7DC6F','#BB8FCE'],
+  mono:['#ffffff','#ffffff','#ffffff','#ffffff','#ffffff','#ffffff','#ffffff','#ffffff','#ffffff'],
+  ocean:['#E3F2FD','#BBDEFB','#90CAF9','#64B2F8','#E8F5E9','#C8E6C9','#DCEDC8','#F0F4C3','#B3E5FC']
+};
+
+let cardStyle = 'photo';
+let cardTheme = 'pastel';
+
+function fillEx(key){ document.getElementById('vocab-input').value = EXAMPLES[key]; }
+
+function selStyle(s){
+  cardStyle = s;
+  ['photo','cute'].forEach(k => {
+    const el = document.getElementById('style-'+k);
+    el.classList.toggle('active', k === s);
+  });
+}
+
+function selTheme(el, theme){
+  cardTheme = theme;
+  document.querySelectorAll('[data-theme]').forEach(b => { b.classList.remove('active'); b.style.background=''; b.style.color=''; b.style.borderColor=''; });
+  el.classList.add('active'); el.style.background='#16a34a'; el.style.color='#fff'; el.style.borderColor='#16a34a';
+}
+
+function parseWords(text){
+  const pairs = [];
+  text.split(',').map(s=>s.trim()).filter(Boolean).forEach(p=>{
+    const m = p.match(/^([a-zA-Z\s'\-]+)\s*([\u4e00-\u9fff\s]*)$/);
+    if(m) pairs.push({en:m[1].trim(), zh:m[2].trim()||''});
+  });
+  return pairs;
+}
+
+function getUnsplashUrl(word){
+  const query = encodeURIComponent(word.toLowerCase());
+  return `https://source.unsplash.com/300x300/?${query},cute`;
+}
+
+function getEmoji(word){
+  const key = word.toLowerCase();
+  return EMOJIS[key] || EMOJIS[key+'_color'] || '📖';
+}
+
+function generate(){
+  const input = document.getElementById('vocab-input').value.trim();
+  if(!input){ alert('請先輸入單字！'); return; }
+  const words = parseWords(input);
+  if(!words.length){ alert('請用「英文 中文」格式，例如：cat 貓, dog 狗'); return; }
+
+  const showZh = document.getElementById('show-zh').value === 'yes';
+  const cols = parseInt(document.getElementById('card-size').value);
+  const themes = THEMES[cardTheme];
+
+  const grid = document.getElementById('cards-grid');
+  grid.style.gridTemplateColumns = `repeat(${cols},1fr)`;
+  grid.innerHTML = '';
+
+  words.forEach((w, i) => {
+    const bgColor = themes[i % themes.length];
+    const emoji = getEmoji(w.en);
+    const isPhoto = cardStyle === 'photo';
+
+    const card = document.createElement('div');
+    card.className = 'flash-card' + (cardStyle === 'cute' ? ' style-colorful' : '');
+
+    if(cardStyle === 'cute'){
+      card.style.background = bgColor;
+      card.style.borderColor = bgColor;
+    }
+
+    const imgWrap = document.createElement('div');
+    imgWrap.className = 'card-img-wrap';
+    imgWrap.style.background = isPhoto ? '#f0f0f0' : bgColor;
+
+    if(isPhoto){
+      const img = document.createElement('img');
+      const keywords = ['cat','dog','bird','fish','rabbit','elephant','lion','tiger','monkey','bear','apple','banana','milk','bread','egg','cake','pizza','sun','moon','star','tree','flower','car','bus','bike'];
+      const wordLower = w.en.toLowerCase();
+      if(keywords.includes(wordLower)){
+        img.src = `https://source.unsplash.com/300x300/?${encodeURIComponent(wordLower)},isolated,white+background`;
+      } else {
+        img.src = `https://source.unsplash.com/300x300/?${encodeURIComponent(w.en)}`;
+      }
+      img.alt = w.en;
+      img.style.cssText = 'width:100%;height:100%;object-fit:cover';
+      img.onerror = function(){
+        this.style.display='none';
+        const fb = document.createElement('div');
+        fb.className = 'cute-art';
+        fb.textContent = emoji;
+        imgWrap.appendChild(fb);
+      };
+      imgWrap.appendChild(img);
+    } else {
+      const art = document.createElement('div');
+      art.className = 'cute-art';
+      art.textContent = emoji;
+      imgWrap.appendChild(art);
+    }
+
+    const bottom = document.createElement('div');
+    bottom.className = 'card-bottom';
+    if(cardStyle === 'cute') bottom.style.background = bgColor;
+
+    const enEl = document.createElement('div');
+    enEl.className = 'card-en';
+    enEl.textContent = w.en.charAt(0).toUpperCase() + w.en.slice(1);
+    if(cardStyle === 'cute') enEl.style.color = '#1e293b';
+
+    bottom.appendChild(enEl);
+
+    if(showZh && w.zh){
+      const zhEl = document.createElement('div');
+      zhEl.className = 'card-zh';
+      zhEl.textContent = w.zh;
+      if(cardStyle === 'cute') zhEl.style.color = '#475569';
+      bottom.appendChild(zhEl);
+    }
+
+    card.appendChild(imgWrap);
+    card.appendChild(bottom);
+    grid.appendChild(card);
+  });
+
+  document.getElementById('card-out').style.display = 'block';
+  document.getElementById('gen-btn').innerHTML = '🃏 重新生成';
+}
+</script>
+</body>
+</html>
