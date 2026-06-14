@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LINE 文字清洗助手</title>
+<script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+<style>
+body { background: linear-gradient(135deg, #f8fafc 0%, #f0fdf4 50%, #f8fafc 100%); font-family: system-ui, -apple-system, sans-serif; color: #1e293b; }
+.card { background: rgba(255,255,255,0.9); border: 1.5px solid #e2e8f0; border-radius: 1rem; box-shadow: 0 4px 15px -3px rgba(148,163,184,0.12); }
+label.field-label { font-size: 0.7rem; font-weight: 700; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.05em; display: block; margin-bottom: 4px; }
+input, select, textarea { width: 100%; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 0.65rem; padding: 0.55rem 0.75rem; font-size: 0.875rem; color: #1e293b; font-family: inherit; resize: none; }
+input:focus, select:focus, textarea:focus { outline: none; border-color: #4ade80; }
+.gen-btn { background: #0d9488; color: #fff; border: none; border-radius: 0.75rem; padding: 0.8rem; font-size: 0.95rem; font-weight: 600; cursor: pointer; width: 100%; display: flex; align-items: center; justify-content: center; gap: 0.5rem; transition: background 0.15s; }
+.gen-btn:hover { background: #0f766e; }
+.gen-btn:disabled { background: #cbd5e1; cursor: not-allowed; }
+.clean-opt { display: flex; align-items: flex-start; gap: 8px; padding: 10px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 0.65rem; cursor: pointer; }
+.clean-opt input[type=checkbox] { margin-top: 1px; accent-color: #0d9488; flex-shrink: 0; }
+.clean-opt-text { font-size: 0.8rem; color: #1e293b; line-height: 1.5; }
+.clean-opt-sub { font-size: 0.7rem; color: #94a3b8; }
+.out-box { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 0.75rem; padding: 1.25rem; white-space: pre-wrap; font-size: 0.875rem; line-height: 1.9; color: #334155; }
+.copy-btn { font-size: 0.75rem; color: #0d9488; border: 1px solid #99f6e4; border-radius: 0.5rem; padding: 4px 10px; cursor: pointer; background: none; }
+.copy-btn:hover { background: #f0fdf4; }
+.spinner { display: inline-block; width: 16px; height: 16px; border: 2px solid rgba(255,255,255,0.4); border-top-color: #fff; border-radius: 50%; animation: spin 0.7s linear infinite; vertical-align: middle; }
+@keyframes spin { to { transform: rotate(360deg); } }
+.back-btn { display: inline-flex; align-items: center; gap: 5px; color: #0d9488; font-size: 0.85rem; font-weight: 500; text-decoration: none; margin-bottom: 1.5rem; }
+.back-btn:hover { text-decoration: underline; }
+</style>
+</head>
+<body class="min-h-screen p-4 md:p-8">
+<div class="max-w-2xl mx-auto">
+  <a href="index.html" class="back-btn">← 返回 Joyce's ABC Base</a>
+  <div class="card p-6 mb-5">
+    <div class="flex items-center gap-3 mb-1">
+      <div class="w-10 h-10 bg-teal-100 text-teal-600 rounded-xl flex items-center justify-center text-xl">✨</div>
+      <div>
+        <h1 class="text-xl font-extrabold text-slate-800">LINE 文字清洗助手</h1>
+        <p class="text-xs text-slate-400">貼入 AI 生成訊息，一鍵清洗成自然真人語氣</p>
+      </div>
+    </div>
+  </div>
+  <div class="card p-5 mb-4">
+    <div class="mb-3">
+      <label class="field-label">貼入 AI 生成的訊息</label>
+      <textarea id="inputText" rows="6" placeholder="貼入任何 AI 生成的內容，例如有 **粗體**、多餘 emoji、AI 感開場白的文字..."></textarea>
+    </div>
+    <div class="mb-3">
+      <label class="field-label">清洗選項</label>
+      <div class="grid grid-cols-2 gap-2">
+        <label class="clean-opt"><input type="checkbox" id="c1" checked><div class="clean-opt-text">移除多餘 emoji<div class="clean-opt-sub">保留必要，刪裝飾性</div></div></label>
+        <label class="clean-opt"><input type="checkbox" id="c2" checked><div class="clean-opt-text">移除粗體格式<div class="clean-opt-sub">**文字** → 一般文字</div></div></label>
+        <label class="clean-opt"><input type="checkbox" id="c3" checked><div class="clean-opt-text">刪除 AI 贅字<div class="clean-opt-sub">「希望這封信找到您」等</div></div></label>
+        <label class="clean-opt"><input type="checkbox" id="c4" checked><div class="clean-opt-text">壓縮濃縮<div class="clean-opt-sub">保留重點，縮短篇幅</div></div></label>
+        <label class="clean-opt"><input type="checkbox" id="c5"><div class="clean-opt-text">調整語氣<div class="clean-opt-sub">更像真人老師說話</div></div></label>
+        <label class="clean-opt"><input type="checkbox" id="c6"><div class="clean-opt-text">LINE 排版優化<div class="clean-opt-sub">適合手機閱讀斷行</div></div></label>
+      </div>
+    </div>
+    <div class="grid grid-cols-2 gap-3 mb-4">
+      <div>
+        <label class="field-label">訊息用途</label>
+        <select id="purpose">
+          <option>家長 LINE 訊息</option>
+          <option>聯絡簿內容</option>
+          <option>活動通知</option>
+          <option>學校公告</option>
+        </select>
+      </div>
+      <div>
+        <label class="field-label">語氣</label>
+        <select id="tone">
+          <option>溫暖親切</option>
+          <option>簡潔俐落</option>
+          <option>正式專業</option>
+        </select>
+      </div>
+    </div>
+    <button class="gen-btn" id="genBtn" onclick="clean()">✨ 清洗 + 重整格式</button>
+  </div>
+  <div id="outZone" style="display:none" class="card p-5">
+    <div class="flex items-center justify-between mb-3">
+      <h2 class="font-bold text-slate-700">✅ 清洗完成</h2>
+      <button class="copy-btn" onclick="copyOut()">📋 複製</button>
+    </div>
+    <div class="out-box" id="outContent"></div>
+    <p id="diffNote" class="text-xs text-slate-400 mt-2"></p>
+  </div>
+</div>
+<script>
+async function clean() {
+  const input = document.getElementById('inputText').value.trim();
+  if (!input) { alert('請先貼入要清洗的訊息'); return; }
+  const opts = [];
+  if (document.getElementById('c1').checked) opts.push('移除裝飾性 emoji，只保留必要的');
+  if (document.getElementById('c2').checked) opts.push('移除所有 ** 粗體標記，還原成一般文字');
+  if (document.getElementById('c3').checked) opts.push('刪除 AI 常見贅字（如「希望這封信找到您時一切安好」等開場白）');
+  if (document.getElementById('c4').checked) opts.push('濃縮壓縮，保留重點，刪除重複說法');
+  if (document.getElementById('c5').checked) opts.push('語氣調整得更像真人老師，自然口語');
+  if (document.getElementById('c6').checked) opts.push('適合 LINE 手機閱讀的段落和斷行');
+  const purpose = document.getElementById('purpose').value;
+  const tone = document.getElementById('tone').value;
+  const btn = document.getElementById('genBtn');
+  btn.disabled = true; btn.innerHTML = '<span class="spinner"></span> 清洗中...';
+  document.getElementById('outZone').style.display = 'block';
+  document.getElementById('outContent').textContent = '⏳ 處理中...';
+  try {
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ model: 'claude-sonnet-4-6', max_tokens: 800, messages: [{ role: 'user', content: `你是文字編輯專家，幫幼兒園老師清洗 AI 生成訊息。\n原始訊息：\n${input}\n\n處理要求：\n${opts.map((o,i)=>`${i+1}. ${o}`).join('\n')}\n\n用途：${purpose}\n語氣：${tone}\n\n只輸出清洗後的訊息，不要任何說明。` }] })
+    });
+    const data = await res.json();
+    const result = data.content.map(i => i.text||'').join('');
+    document.getElementById('outContent').textContent = result;
+    const diff = Math.round((1 - result.length / input.length) * 100);
+    document.getElementById('diffNote').textContent = diff > 0 ? `已縮短約 ${diff}%（${input.length} → ${result.length} 字）` : '';
+  } catch(e) { document.getElementById('outContent').textContent = '清洗失敗，請重試。'; }
+  btn.disabled = false; btn.innerHTML = '✨ 清洗 + 重整格式';
+}
+function copyOut() {
+  navigator.clipboard.writeText(document.getElementById('outContent').textContent).then(() => {
+    const btn = event.currentTarget; const orig = btn.innerHTML;
+    btn.innerHTML = '✅ 已複製！'; setTimeout(() => btn.innerHTML = orig, 1500);
+  });
+}
+</script>
+</body>
+</html>
