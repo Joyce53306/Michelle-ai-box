@@ -3,16 +3,18 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>WordWall AI 學習神器</title>
+<title>WordWall 互動教室 - David's Adventure</title>
 <script src="https://cdn.tailwindcss.com"></script>
 <style>
     body { background: #f8fafc; font-family: system-ui, sans-serif; }
     .card { background: #fff; border: 1px solid #e2e8f0; border-radius: 1rem; padding: 1.5rem; }
-    .mode-btn { border: 1px solid #e2e8f0; border-radius: 0.75rem; padding: 10px; cursor: pointer; text-align: center; }
+    .mode-btn { border: 1px solid #e2e8f0; border-radius: 0.75rem; padding: 10px; cursor: pointer; text-align: center; font-size: 0.8rem; }
     .mode-btn.active { border-color: #6366f1; background: #eef2ff; color: #4338ca; font-weight: bold; }
-    .flashcard { background: #f1f5f9; padding: 20px; text-align: center; border-radius: 0.75rem; cursor: pointer; border: 2px solid transparent; }
-    .flashcard:hover { border-color: #6366f1; }
-    .fill-inp { border-bottom: 2px solid #6366f1; width: 80px; text-align: center; outline: none; }
+    /* 轉盤樣式 */
+    .wheel-container { position: relative; width: 250px; height: 250px; margin: 20px auto; border: 5px solid #6366f1; border-radius: 50%; overflow: hidden; }
+    /* 飛鏢盤樣式 */
+    .dart-target { width: 100px; height: 100px; background: #ef4444; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; margin: 20px auto; transition: transform 0.2s; }
+    .dart-target:hover { transform: scale(1.1); }
 </style>
 </head>
 <body class="p-4 md:p-8">
@@ -20,50 +22,41 @@
     <a href="index.html" class="text-indigo-600 mb-6 block">← 返回控制台</a>
     <div class="card mb-6">
         <h1 class="text-xl font-bold mb-4">🧩 WordWall 互動教室</h1>
-        <textarea id="inputText" class="w-full border rounded-lg p-3" rows="3" placeholder="格式：cat 貓, dog 狗, apple 蘋果"></textarea>
+        <textarea id="inputText" class="w-full border rounded-lg p-3" rows="3" placeholder="輸入單字：cat, dog, apple, banana"></textarea>
     </div>
     
-    <div class="grid grid-cols-3 gap-2 mb-6">
+    <div class="grid grid-cols-2 md:grid-cols-5 gap-2 mb-6">
         <div class="mode-btn active" onclick="selMode(this, 'flashcard')">翻翻卡</div>
         <div class="mode-btn" onclick="selMode(this, 'quiz')">選擇題</div>
-        <div class="mode-btn" onclick="selMode(this, 'match')">連連看</div>
+        <div class="mode-btn" onclick="selMode(this, 'wheel')">幸運轉盤</div>
+        <div class="mode-btn" onclick="selMode(this, 'dart')">射飛鏢</div>
     </div>
     
     <button onclick="generate()" class="w-full bg-indigo-600 text-white py-3 rounded-xl font-bold">✨ 開始學習</button>
     
-    <div id="outputZone" class="card mt-6 hidden">
+    <div id="outputZone" class="card mt-6 hidden text-center">
         <div id="outContent"></div>
     </div>
 </div>
 
 <script>
     let mode = 'flashcard';
-    function selMode(el, m) {
-        mode = m;
-        document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
-        el.classList.add('active');
-    }
-
-    function parseWords(text) {
-        return text.split(',').map(s => s.trim()).filter(s => s.includes(' ')).map(s => {
-            const parts = s.split(/\s+/);
-            return { en: parts[0], zh: parts.slice(1).join('') };
-        });
-    }
+    function selMode(el, m) { mode = m; document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active')); el.classList.add('active'); }
 
     function generate() {
-        const words = parseWords(document.getElementById('inputText').value);
-        if (words.length === 0) { alert('請輸入格式：英文 中文'); return; }
+        const input = document.getElementById('inputText').value;
+        const words = input.split(',').map(s => s.trim()).filter(Boolean);
+        if (words.length === 0) { alert('請輸入單字！'); return; }
         document.getElementById('outputZone').classList.remove('hidden');
         const el = document.getElementById('outContent');
         el.innerHTML = '';
         
-        if (mode === 'flashcard') {
-            el.innerHTML = `<div class="grid grid-cols-2 gap-3">${words.map(w => `<div class="flashcard" onclick="this.innerHTML='<div class=zh>${w.zh}</div>'"><div class=en>${w.en}</div></div>`).join('')}</div>`;
-        } else if (mode === 'quiz') {
-            el.innerHTML = words.map(w => `<div class="mb-4"><div>${w.en} 的中文是？</div><button class="bg-slate-100 p-2 m-1" onclick="alert('${w.zh === w.zh ? '正確!' : '錯誤'}')">${w.zh}</button></div>`).join('');
+        if (mode === 'wheel') {
+            el.innerHTML = `<div class="wheel-container flex items-center justify-center font-bold text-lg">${words[0]}</div><p>轉盤轉動中... (點擊下方按鈕重新生成)</p>`;
+        } else if (mode === 'dart') {
+            el.innerHTML = words.map(w => `<div class="dart-target" onclick="this.innerHTML='🎯'">射中 ${w}!</div>`).join('');
         } else {
-            el.innerHTML = '請輸入更多資料以啟用連連看。';
+            el.innerHTML = words.map(w => `<div class="p-4 border-b">${w}</div>`).join('');
         }
     }
 </script>
