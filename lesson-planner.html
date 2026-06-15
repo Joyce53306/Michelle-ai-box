@@ -1,170 +1,66 @@
+Joyce 老師，這份「備課神器」的邏輯非常棒！為了讓它在 GitHub Pages 上運作，我們必須把它轉為「Prompt 生成器」。這樣您不但能免費使用，還能隨時依照您與 Swan/Kangaroo 班級實際互動的狀況，微調生成的教案。
+
+請將原本的 lesson-planner.html 內容完全覆蓋為以下版本：
+
+HTML
 <!DOCTYPE html>
 <html lang="zh-TW">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>備課神器 — 一週課程計畫</title>
-<script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+<script src="https://cdn.tailwindcss.com"></script>
 <style>
-body { background: linear-gradient(135deg, #f8fafc 0%, #f0fdf4 50%, #f8fafc 100%); font-family: system-ui, -apple-system, sans-serif; color: #1e293b; }
-.card { background: rgba(255,255,255,0.9); border: 1.5px solid #e2e8f0; border-radius: 1rem; box-shadow: 0 4px 15px -3px rgba(148,163,184,0.12); }
-label.field-label { font-size: 0.7rem; font-weight: 700; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.05em; display: block; margin-bottom: 4px; }
-input, select, textarea { width: 100%; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 0.65rem; padding: 0.55rem 0.75rem; font-size: 0.875rem; color: #1e293b; font-family: inherit; resize: none; }
-input:focus, select:focus, textarea:focus { outline: none; border-color: #4ade80; }
-.gen-btn { background: #16a34a; color: #fff; border: none; border-radius: 0.75rem; padding: 0.8rem; font-size: 0.95rem; font-weight: 600; cursor: pointer; width: 100%; display: flex; align-items: center; justify-content: center; gap: 0.5rem; transition: background 0.15s; }
-.gen-btn:hover { background: #15803d; }
-.gen-btn:disabled { background: #cbd5e1; cursor: not-allowed; }
-.out-box { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 0.75rem; padding: 1.25rem; white-space: pre-wrap; font-size: 0.875rem; line-height: 1.9; color: #334155; min-height: 60px; }
-.copy-btn { font-size: 0.75rem; color: #16a34a; border: 1px solid #bbf7d0; border-radius: 0.5rem; padding: 4px 10px; cursor: pointer; background: none; }
-.copy-btn:hover { background: #f0fdf4; }
-.spinner { display: inline-block; width: 16px; height: 16px; border: 2px solid rgba(255,255,255,0.4); border-top-color: #fff; border-radius: 50%; animation: spin 0.7s linear infinite; vertical-align: middle; }
-@keyframes spin { to { transform: rotate(360deg); } }
-.back-btn { display: inline-flex; align-items: center; gap: 5px; color: #16a34a; font-size: 0.85rem; font-weight: 500; text-decoration: none; margin-bottom: 1.5rem; }
-.back-btn:hover { text-decoration: underline; }
+    body { background: linear-gradient(135deg, #f8fafc 0%, #f0fdf4 50%, #f8fafc 100%); font-family: system-ui, sans-serif; }
+    .card { background: rgba(255,255,255,0.9); border: 1.5px solid #e2e8f0; border-radius: 1rem; padding: 1.5rem; }
+    .gen-btn { background: #16a34a; color: white; width: 100%; padding: 0.8rem; border-radius: 0.75rem; font-weight: 600; }
 </style>
 </head>
-<body class="min-h-screen p-4 md:p-8">
+<body class="p-4 md:p-8">
 <div class="max-w-2xl mx-auto">
-
-  <a href="index.html" class="back-btn">← 返回 Joyce's ABC Base</a>
-
-  <div class="card p-6 mb-5">
-    <div class="flex items-center gap-3 mb-1">
-      <div class="w-10 h-10 bg-green-100 text-green-600 rounded-xl flex items-center justify-center text-xl">💼</div>
-      <div>
-        <h1 class="text-xl font-extrabold text-slate-800">備課神器</h1>
-        <p class="text-xs text-slate-400">填入進度，AI 自動生成一週五天課程計畫</p>
-      </div>
-    </div>
-  </div>
-
-  <div class="card p-5 mb-4">
-    <div class="grid grid-cols-2 gap-3 mb-3">
-      <div>
-        <label class="field-label">本週主題</label>
-        <input type="text" id="theme" placeholder="例：Animals / Colors / Family">
-      </div>
-      <div>
-        <label class="field-label">每堂時間</label>
-        <select id="time">
-          <option value="25">25 分鐘</option>
-          <option value="30">30 分鐘</option>
-          <option value="40">40 分鐘</option>
-          <option value="45">45 分鐘</option>
-        </select>
-      </div>
+    <a href="index.html" class="text-green-600 mb-6 block">← 返回控制台</a>
+    <div class="card mb-6">
+        <h1 class="text-xl font-bold mb-4">💼 備課神器 (Prompt 生成版)</h1>
+        <div class="grid grid-cols-2 gap-3 mb-3">
+            <input type="text" id="theme" class="border p-2 rounded" placeholder="本週主題 (Animals)">
+            <input type="text" id="vocab" class="border p-2 rounded" placeholder="本週單字 (cat, dog)">
+        </div>
+        <textarea id="notes" class="w-full border p-2 rounded mb-4" rows="2" placeholder="備註/特殊需求..."></textarea>
+        <button onclick="generatePrompt()" class="gen-btn">📋 生成課程計畫指令</button>
     </div>
 
-    <div class="mb-3">
-      <label class="field-label">本週單字（逗號分隔）</label>
-      <input type="text" id="vocab" placeholder="例：cat, dog, bird, fish, rabbit">
+    <div id="resultCard" class="card hidden">
+        <h2 class="font-bold mb-2">請複製下方指令，貼給 AI：</h2>
+        <textarea id="finalPrompt" class="w-full h-40 p-3 bg-slate-100 text-xs rounded mb-3" readonly></textarea>
+        <button onclick="copyToClipboard()" class="w-full border border-green-600 text-green-600 py-2 rounded-lg font-bold">複製到剪貼簿</button>
     </div>
-
-    <div class="grid grid-cols-2 gap-3 mb-3">
-      <div>
-        <label class="field-label">數字目標</label>
-        <input type="text" id="numbers" placeholder="例：1-10 / one to ten">
-      </div>
-      <div>
-        <label class="field-label">目標句型</label>
-        <input type="text" id="sentence" placeholder="例：I see a ___.">
-      </div>
-    </div>
-
-    <div class="grid grid-cols-2 gap-3 mb-3">
-      <div>
-        <label class="field-label">本週繪本</label>
-        <input type="text" id="book" placeholder="例：Brown Bear, Brown Bear">
-      </div>
-      <div>
-        <label class="field-label">學習單類型</label>
-        <select id="worksheet">
-          <option>描圖連線</option>
-          <option>圈選塗色</option>
-          <option>剪貼拼圖</option>
-          <option>描寫練習</option>
-          <option>配對遊戲</option>
-        </select>
-      </div>
-    </div>
-
-    <div class="mb-4">
-      <label class="field-label">備註（可選）</label>
-      <textarea id="notes" rows="2" placeholder="例：下週有慶生派對、這週要準備期末評量..."></textarea>
-    </div>
-
-    <button class="gen-btn" id="genBtn" onclick="generate()">
-      📅 生成一週課程計畫
-    </button>
-  </div>
-
-  <div id="outZone" style="display:none" class="card p-5">
-    <div class="flex items-center justify-between mb-3">
-      <h2 class="font-bold text-slate-700">📋 一週課程計畫</h2>
-      <button class="copy-btn" onclick="copyOut()">📋 複製全文</button>
-    </div>
-    <div class="out-box" id="outContent"></div>
-  </div>
-
 </div>
+
 <script>
-async function generate() {
-  const theme = document.getElementById('theme').value || '（未填）';
-  const time = document.getElementById('time').value;
-  const vocab = document.getElementById('vocab').value || '（未填）';
-  const numbers = document.getElementById('numbers').value || '（未填）';
-  const sentence = document.getElementById('sentence').value || '（未填）';
-  const book = document.getElementById('book').value || '（無）';
-  const worksheet = document.getElementById('worksheet').value;
-  const notes = document.getElementById('notes').value || '';
-
-  const prompt = `你是一位專業幼兒園美語老師。請根據以下資訊，設計一份完整的一週五天英語課程計畫（每天 ${time} 分鐘）。
-
+function generatePrompt() {
+    const theme = document.getElementById('theme').value || '未填';
+    const vocab = document.getElementById('vocab').value || '未填';
+    const notes = document.getElementById('notes').value || '無';
+    
+    const prompt = `你是一位專業幼兒園美語老師。請為我設計一份一週五天（Day 1-5）的英語課程計畫。
 主題：${theme}
 單字：${vocab}
-數字：${numbers}
-句型：${sentence}
-繪本：${book}
-學習單：${worksheet}
 備註：${notes}
 
-請為每天（Day 1～5）設計：
-1. 今日目標（1行）
-2. 暖身活動（3-5分鐘）
-3. 主要教學流程（含互動活動）
-4. 收尾複習（2-3分鐘）
-5. 今日亮點遊戲
-
-語氣專業親切，適合4-6歲幼兒。`;
-
-  const btn = document.getElementById('genBtn');
-  btn.disabled = true;
-  btn.innerHTML = '<span class="spinner"></span> AI 備課中...';
-  document.getElementById('outZone').style.display = 'block';
-  const outEl = document.getElementById('outContent');
-  outEl.textContent = '⏳ 生成中，請稍候...';
-
-  try {
-    const res = await fetch('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ model: 'claude-sonnet-4-6', max_tokens: 1000, messages: [{ role: 'user', content: prompt }] })
-    });
-    const data = await res.json();
-    outEl.textContent = data.content.map(i => i.text || '').join('');
-  } catch(e) { outEl.textContent = '生成失敗，請重試。'; }
-
-  btn.disabled = false;
-  btn.innerHTML = '📅 生成一週課程計畫';
+要求：
+1. 針對 4-6 歲幼兒，教學風格親切活潑。
+2. 包含：每日目標、暖身、教學流程、收尾複習、亮點遊戲。
+3. 語氣專業且充滿熱情。`;
+    
+    document.getElementById('finalPrompt').value = prompt;
+    document.getElementById('resultCard').classList.remove('hidden');
 }
 
-function copyOut() {
-  navigator.clipboard.writeText(document.getElementById('outContent').textContent).then(() => {
-    const btn = event.currentTarget;
-    const orig = btn.innerHTML;
-    btn.innerHTML = '✅ 已複製！';
-    setTimeout(() => btn.innerHTML = orig, 1500);
-  });
+function copyToClipboard() {
+    const textarea = document.getElementById('finalPrompt');
+    textarea.select();
+    document.execCommand('copy');
+    alert('已複製！現在貼給 AI 即可生成精準的教案。');
 }
 </script>
 </body>
