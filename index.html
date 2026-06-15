@@ -4,198 +4,73 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Joyce's ABC Base</title>
-<script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+<script src="https://cdn.tailwindcss.com"></script>
 <style>
-body { background: linear-gradient(135deg, #f8fafc 0%, #f0f9ff 50%, #f8fafc 100%); color: #1e293b; font-family: system-ui, -apple-system, sans-serif; }
-.joyce-strip-card { background: rgba(255,255,255,0.85); backdrop-filter: blur(10px); border: 2px solid rgba(226,232,240,0.8); box-shadow: 0 4px 15px -3px rgba(148,163,184,0.12); }
-.joyce-btn-flat { background: #ffffff; color: #334155; border: 1.5px solid #e2e8f0; border-radius: 1rem; transition: all 0.2s ease; }
-.joyce-btn-flat:hover { background: #f0f9ff; border-color: #7dd3fc; transform: translateY(-2px); box-shadow: 0 4px 12px rgba(125,211,252,0.2); }
-.ai-tool-btn { background: #ffffff; border: 1.5px solid #e2e8f0; border-radius: 1rem; transition: all 0.2s ease; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 1rem 0.5rem; text-align: center; text-decoration: none; color: #334155; }
-.ai-tool-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 16px rgba(99,102,241,0.15); border-color: #a5b4fc; }
-.ai-tool-btn .icon { font-size: 1.75rem; margin-bottom: 6px; }
-.ai-tool-btn .name { font-size: 0.8rem; font-weight: 700; color: #1e293b; }
-.ai-tool-btn .desc { font-size: 0.65rem; color: #94a3b8; margin-top: 2px; line-height: 1.3; }
-.ai-badge { font-size: 0.6rem; background: #eef2ff; color: #4338ca; border-radius: 0.5rem; padding: 2px 6px; font-weight: 700; margin-top: 4px; display: inline-block; }
+    body { background: linear-gradient(135deg, #f8fafc 0%, #f0f9ff 50%, #f8fafc 100%); color: #1e293b; font-family: system-ui, sans-serif; }
+    .joyce-strip-card { background: rgba(255,255,255,0.85); backdrop-filter: blur(10px); border: 2px solid rgba(226,232,240,0.8); box-shadow: 0 4px 15px -3px rgba(148,163,184,0.12); }
+    .joyce-btn-flat { background: #ffffff; color: #334155; border: 1.5px solid #e2e8f0; border-radius: 1rem; transition: all 0.2s ease; display: block; text-align: center; padding: 1rem; }
+    .joyce-btn-flat:hover { background: #f0f9ff; border-color: #7dd3fc; transform: translateY(-2px); }
+    .ai-tool-btn { background: #ffffff; border: 1.5px solid #e2e8f0; border-radius: 1rem; transition: all 0.2s ease; display: flex; align-items: center; padding: 1rem; text-decoration: none; color: #334155; }
+    .ai-tool-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 16px rgba(99,102,241,0.15); border-color: #a5b4fc; }
+    .ai-badge { font-size: 0.6rem; background: #eef2ff; color: #4338ca; border-radius: 0.5rem; padding: 2px 6px; font-weight: 700; }
 </style>
 </head>
 <body class="min-h-screen flex flex-col md:flex-row">
-<aside class="w-full md:w-72 bg-white/70 backdrop-blur-md p-6 border-b md:border-b-0 md:border-r border-slate-200/60 flex flex-col justify-between">
-  <div>
+<aside class="w-full md:w-72 bg-white/70 backdrop-blur-md p-6 border-b md:border-r border-slate-200">
     <div class="flex items-center gap-3 mb-10">
-      <div class="w-14 h-14 bg-gradient-to-tr from-purple-500 to-indigo-500 rounded-full flex items-center justify-center text-2xl font-black text-white shadow-md">J</div>
-      <div>
-        <h1 class="text-xl font-extrabold text-slate-800 tracking-wide">Joyce's ABC Base</h1>
-        <p class="text-xs text-sky-600 font-bold uppercase tracking-wider">TEACHING HUB</p>
-      </div>
+        <div class="w-14 h-14 bg-gradient-to-tr from-purple-500 to-indigo-500 rounded-full flex items-center justify-center text-2xl font-black text-white shadow-md">J</div>
+        <div>
+            <h1 class="text-xl font-extrabold text-slate-800">Joyce's ABC Base</h1>
+            <p class="text-xs text-sky-600 font-bold uppercase tracking-wider">TEACHING HUB</p>
+        </div>
     </div>
-    <nav class="space-y-2 text-base font-semibold text-slate-600">
-      <div class="bg-sky-100/80 text-sky-800 p-3.5 rounded-xl flex items-center gap-2">✨ 精選必備</div>
-      <div class="hover:bg-white/60 p-3.5 rounded-xl flex items-center gap-2 cursor-pointer transition">🎮 課堂遊戲</div>
-      <div class="hover:bg-white/60 p-3.5 rounded-xl flex items-center gap-2 cursor-pointer transition">💼 備課大腦</div>
-      <div class="hover:bg-white/60 p-3.5 rounded-xl flex items-center gap-2 cursor-pointer transition">📣 親師溝通</div>
-      <div class="hover:bg-white/60 p-3.5 rounded-xl flex items-center gap-2 cursor-pointer transition">🎵 感官音頻</div>
-    </nav>
-  </div>
-  <div class="text-xs text-slate-400 mt-8">© 方方老師 啟發 / Joyce 改造版</div>
 </aside>
-<main class="flex-1 p-6 md:p-10 overflow-y-auto">
-  <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
-    <h2 class="text-2xl font-extrabold text-slate-800 flex items-center gap-2">✨ 精選必備工具</h2>
-    <div class="text-sm bg-amber-100/80 text-amber-800 px-4 py-2 rounded-full font-bold shadow-sm self-start">🔸 2-6歲幼兒英語核心</div>
-  </div>
-  <div class="mb-6">
-    <h3 class="text-lg font-bold text-slate-800 flex items-center gap-1.5 mb-1">🎮 課堂互動遊戲基地</h3>
-    <p class="text-sm text-slate-500">點擊開啟完全部署在 GitHub 的互動專案，上課投影或平板練習皆適用。</p>
-  </div>
-  <div class="space-y-5">
-    <div class="joyce-strip-card rounded-2xl p-5">
-      <div class="flex items-center gap-2 mb-4 text-base font-bold text-slate-700"><span class="p-1.5 bg-sky-100 text-sky-700 rounded-lg text-lg">🔤</span>Alphabet</div>
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
-        <a href="https://joyce53306.github.io/alphabet-match/" target="_blank" class="joyce-btn-flat p-4 text-center"><div class="text-base font-bold">小</div><div class="text-xs text-slate-400 mt-1">alphabet-match</div></a>
-        <a href="https://joyce53306.github.io/alphabet-pair-match/" target="_blank" class="joyce-btn-flat p-4 text-center"><div class="text-base font-bold">中</div><div class="text-xs text-slate-400 mt-1">alphabet-pair-match</div></a>
-        <a href="https://joyce53306.github.io/phonics-level-up/" target="_blank" class="joyce-btn-flat p-4 text-center"><div class="text-base font-bold">大</div><div class="text-xs text-slate-400 mt-1">phonics-level-up</div></a>
-        <a href="https://joyce53306.github.io/phonics-hero/" target="_blank" class="joyce-btn-flat p-4 text-center"><div class="text-base font-bold">中弱</div><div class="text-xs text-slate-400 mt-1">phonics-hero</div></a>
-      </div>
-    </div>
-    <div class="joyce-strip-card rounded-2xl p-5">
-      <div class="flex items-center gap-2 mb-4 text-base font-bold text-slate-700"><span class="p-1.5 bg-amber-100 text-amber-700 rounded-lg text-lg">📚</span>Phonics & Sight Words</div>
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
-        <a href="https://joyce53306.github.io/mid-phonics-english/" target="_blank" class="joyce-btn-flat p-4 text-center"><div class="text-base font-bold">短母音</div><div class="text-xs text-slate-400 mt-1">mid-phonics-english</div></a>
-        <a href="https://joyce53306.github.io/phonics-long-vowels/" target="_blank" class="joyce-btn-flat p-4 text-center"><div class="text-base font-bold">長母音</div><div class="text-xs text-slate-400 mt-1">phonics-long-vowels</div></a>
-        <a href="https://joyce53306.github.io/mid-sight-words/" target="_blank" class="joyce-btn-flat p-4 text-center"><div class="text-base font-bold">中班</div><div class="text-xs text-slate-400 mt-1">mid-sight-words</div></a>
-        <a href="https://joyce53306.github.io/Review-sight-words/" target="_blank" class="joyce-btn-flat p-4 text-center"><div class="text-base font-bold">大中班</div><div class="text-xs text-slate-400 mt-1">Review-sight-words</div></a>
-      </div>
-    </div>
-    <div class="joyce-strip-card rounded-2xl p-5">
-      <div class="flex items-center gap-2 mb-4 text-base font-bold text-slate-700"><span class="p-1.5 bg-emerald-100 text-emerald-700 rounded-lg text-lg">🚀</span>David 互動基地</div>
-      <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
-        <a href="https://joyce53306.github.io/Small-Class-Sentences-Practicess/" target="_blank" class="joyce-btn-flat p-4 text-center"><div class="text-base font-bold">小班</div><div class="text-xs text-slate-400 mt-1">Small-Class-Sentences</div></a>
-        <a href="https://joyce53306.github.io/mid-class-english/" target="_blank" class="joyce-btn-flat p-4 text-center"><div class="text-base font-bold">中班</div><div class="text-xs text-slate-400 mt-1">mid-class-english</div></a>
-        <a href="https://joyce53306.github.io/big-class-english/" target="_blank" class="joyce-btn-flat p-4 text-center"><div class="text-base font-bold">大班</div><div class="text-xs text-slate-400 mt-1">big-class-english</div></a>
-      </div>
+<main class="flex-1 p-6 md:p-10">
+    <h2 class="text-2xl font-extrabold mb-8">✨ 精選必備工具</h2>
+
+    <!-- 🎮 課堂遊戲 -->
+    <h3 class="text-lg font-bold mb-4">🎮 課堂互動遊戲基地</h3>
+    <div class="joyce-strip-card rounded-2xl p-5 mb-10">
+        <div class="grid grid-cols-1 sm:grid-cols-4 gap-3">
+            <a href="https://joyce53306.github.io/alphabet-match/" class="joyce-btn-flat">Alphabet 小</a>
+            <a href="https://joyce53306.github.io/alphabet-pair-match/" class="joyce-btn-flat">Alphabet 中</a>
+            <a href="https://joyce53306.github.io/phonics-level-up/" class="joyce-btn-flat">Phonics 大</a>
+            <a href="https://joyce53306.github.io/phonics-hero/" class="joyce-btn-flat">Phonics 中弱</a>
+        </div>
     </div>
 
-    <!-- 備課大腦 -->
-    <div class="mt-10 mb-4">
-      <h3 class="text-lg font-bold text-slate-800 flex items-center gap-1.5 mb-1">💼 備課大腦</h3>
-      <p class="text-sm text-slate-500">備課、通知、資料整理的好幫手。</p>
+    <!-- 💼 備課大腦 -->
+    <h3 class="text-lg font-bold mb-4">💼 備課大腦</h3>
+    <div class="joyce-strip-card rounded-2xl p-5 mb-10">
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+            <a href="newsletter-generator.html" class="joyce-btn-flat">課堂快訊</a>
+            <a href="lesson-planner.html" class="joyce-btn-flat">備課神器</a>
+            <a href="music-designer.html" class="joyce-btn-flat">音樂設計師</a>
+            <a href="sel-generator.html" class="joyce-btn-flat">SEL 提問</a>
+        </div>
     </div>
-    <div class="joyce-strip-card rounded-2xl p-5">
-      <div class="flex items-center gap-2 mb-4 text-base font-bold text-slate-700"><span class="p-1.5 bg-rose-100 text-rose-700 rounded-lg text-lg">📰</span>課堂快訊產生器</div>
-      <p class="text-sm text-slate-500 mb-4">填入本週字母、生字、句型、影片連結，一鍵產生家長通知單。</p>
-      <a href="newsletter-generator.html" target="_blank" class="joyce-btn-flat p-4 text-center block">
-        <div class="text-base font-bold">📰 開啟快訊產生器</div>
-        <div class="text-xs text-slate-400 mt-1">newsletter-generator</div>
-      </a>
-    </div>
-    <div class="joyce-strip-card rounded-2xl p-5">
-      <div class="flex items-center gap-2 mb-2 text-base font-bold text-slate-700">
-        <span class="p-1.5 bg-indigo-100 text-indigo-700 rounded-lg text-lg">🤖</span>AI 備課神器
-        <span class="text-xs bg-indigo-100 text-indigo-600 px-2 py-0.5 rounded-full font-bold">NEW</span>
-      </div>
-      <!-- 📊 學生評量 -->
-<div class="mt-10 mb-4">
-  <h3 class="text-lg font-bold text-slate-800 flex items-center gap-1.5 mb-1">📊 學生評量</h3>
-  <p class="text-sm text-slate-500">3-6歲 ESL 學習者觀察記錄與口語評量工具。</p>
-</div>
-<div class="joyce-strip-card rounded-2xl p-5">
-  <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-    <a href="student-assessment.html" class="ai-tool-btn">
-      <div class="icon">📋</div>
-      <div class="name">學習觀察記錄</div>
-      <div class="desc">唱說聽互動學習單全面評量</div>
-      <span class="ai-badge">AI 評語</span>
-    </a>
-    <a href="student-assessment.html" class="ai-tool-btn">
-      <div class="icon">🎤</div>
-      <div class="name">口語評量引導</div>
-      <div class="desc">3-6歲適齡評量問題生成</div>
-      <span class="ai-badge">AI 生成</span>
-    </a>
-  </div>
-</div>
 
-<!-- 🖨️ 教材製作 -->
-<div class="mt-10 mb-4">
-  <h3 class="text-lg font-bold text-slate-800 flex items-center gap-1.5 mb-1">🖨️ 教材製作</h3>
-  <p class="text-sm text-slate-500">快速產出可列印的學習單和字卡。</p>
-</div>
-<div class="joyce-strip-card rounded-2xl p-5">
-  <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-    <a href="worksheet-generator.html" class="ai-tool-btn">
-      <div class="icon">📄</div>
-      <div class="name">學習單生成器</div>
-      <div class="desc">3-6歲有趣適齡學習單</div>
-      <span class="ai-badge">AI 設計</span>
-    </a>
-    <a href="flashcard-maker.html" class="ai-tool-btn">
-      <div class="icon">🃏</div>
-      <div class="name">可列印字卡</div>
-      <div class="desc">真實照片或可愛插圖 A4 字卡</div>
-      <span class="ai-badge" style="background:#f0fdf4;color:#166534">含圖片</span>
-    </a>
-  </div>
-</div>
-      <p class="text-sm text-slate-500 mb-4">AI 驅動的備課工具，輸入資料立即生成內容。</p>
-      <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
-        <a href="wordwall.html" class="ai-tool-btn">
-          <div class="icon">🧩</div>
-          <div class="name">WordWall</div>
-          <div class="desc">教材轉互動遊戲</div>
-          <span class="ai-badge">AI 出題</span>
+    <!-- 📈 學習歷程 (新增區塊) -->
+    <h3 class="text-lg font-bold mb-4">📈 學習歷程追蹤</h3>
+    <div class="joyce-strip-card rounded-2xl p-5 mb-10">
+        <a href="review-box.html" class="ai-tool-btn flex-row justify-start p-4">
+            <div class="text-2xl mr-4">📦</div>
+            <div>
+                <div class="font-bold">Michelle's Review Box</div>
+                <div class="text-xs text-slate-400">國中五科練習、測驗紀錄與 AI 批改系統</div>
+            </div>
+            <span class="ai-badge ml-auto">全功能系統</span>
         </a>
-        <a href="lesson-planner.html" class="ai-tool-btn">
-          <div class="icon">📅</div>
-          <div class="name">備課神器</div>
-          <div class="desc">一週課程計畫生成</div>
-          <span class="ai-badge">AI 備課</span>
-        </a>
-        <a href="music-designer.html" class="ai-tool-btn">
-          <div class="icon">🎵</div>
-          <div class="name">音樂設計師</div>
-          <div class="desc">歌詞 + Suno 提示詞</div>
-          <span class="ai-badge">AI 作曲</span>
-        </a>
-        <a href="sel-generator.html" class="ai-tool-btn">
-          <div class="icon">📖</div>
-          <div class="name">SEL 提問精靈</div>
-          <div class="desc">繪本 Q&A 生成</div>
-          <span class="ai-badge">AI 提問</span>
-        </a>
-      </div>
     </div>
-  </div>
-  <!-- 📣 親師溝通 -->
-    <div class="mt-10 mb-4">
-      <h3 class="text-lg font-bold text-slate-800 flex items-center gap-1.5 mb-1">📣 親師溝通</h3>
-      <p class="text-sm text-slate-500">快速生成家長訊息、通知與突發事件溝通稿。</p>
-    </div>
-    <div class="joyce-strip-card rounded-2xl p-5">
-      <div class="flex items-center gap-2 mb-2 text-base font-bold text-slate-700">
-        <span class="p-1.5 bg-orange-100 text-orange-700 rounded-lg text-lg">💬</span>親師溝通工具
-        <span class="text-xs bg-orange-100 text-orange-600 px-2 py-0.5 rounded-full font-bold">NEW</span>
-      </div>
-      <p class="text-sm text-slate-500 mb-4">一鍵生成各種家長溝通訊息，支援中英文版本。</p>
-      <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
-        <a href="line-cleaner.html" class="ai-tool-btn">
-          <div class="icon">✨</div>
-          <div class="name">LINE 文字清洗</div>
-          <div class="desc">AI 訊息清洗成真人語氣</div>
-          <span class="ai-badge" style="background:#f0fdf4;color:#166534">AI 清洗</span>
-        </a>
-        <a href="notice-generator.html" class="ai-tool-btn">
-          <div class="icon">📩</div>
-          <div class="name">家長通知草稿</div>
-          <div class="desc">聯絡簿、通知、回饋一鍵生成</div>
-          <span class="ai-badge" style="background:#faf5ff;color:#7e22ce">AI 撰寫</span>
-        </a>
-        <a href="incident-helper.html" class="ai-tool-btn">
-          <div class="icon">🚨</div>
-          <div class="name">突發事件小幫手</div>
-          <div class="desc">簡述事情即生成溝通訊息</div>
-          <span class="ai-badge" style="background:#fff7ed;color:#c2410c">AI 應急</span>
-        </a>
-      </div>
+
+    <!-- 📣 親師溝通 -->
+    <h3 class="text-lg font-bold mb-4">📣 親師溝通</h3>
+    <div class="joyce-strip-card rounded-2xl p-5 mb-10">
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+            <a href="line-cleaner.html" class="ai-tool-btn">✨ LINE 文字清洗</a>
+            <a href="notice-generator.html" class="ai-tool-btn">📩 家長通知草稿</a>
+            <a href="incident-helper.html" class="ai-tool-btn">🚨 突發事件幫手</a>
+        </div>
     </div>
 </main>
 </body>
