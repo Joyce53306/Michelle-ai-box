@@ -3,123 +3,70 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>家長通知草稿生成</title>
-<script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+<title>突發事件協助助手</title>
+<script src="https://cdn.tailwindcss.com"></script>
 <style>
-body { background: linear-gradient(135deg, #f8fafc 0%, #fdf4ff 50%, #f8fafc 100%); font-family: system-ui, -apple-system, sans-serif; color: #1e293b; }
-.card { background: rgba(255,255,255,0.9); border: 1.5px solid #e2e8f0; border-radius: 1rem; box-shadow: 0 4px 15px -3px rgba(148,163,184,0.12); }
-label.field-label { font-size: 0.7rem; font-weight: 700; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.05em; display: block; margin-bottom: 4px; }
-input, select, textarea { width: 100%; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 0.65rem; padding: 0.55rem 0.75rem; font-size: 0.875rem; color: #1e293b; font-family: inherit; resize: none; }
-input:focus, select:focus, textarea:focus { outline: none; border-color: #c084fc; }
-.gen-btn { background: #9333ea; color: #fff; border: none; border-radius: 0.75rem; padding: 0.8rem; font-size: 0.95rem; font-weight: 600; cursor: pointer; width: 100%; display: flex; align-items: center; justify-content: center; gap: 0.5rem; transition: background 0.15s; }
-.gen-btn:hover { background: #7e22ce; }
-.gen-btn:disabled { background: #cbd5e1; cursor: not-allowed; }
-.type-btn { border: 1.5px solid #e2e8f0; border-radius: 0.75rem; padding: 8px 6px; font-size: 0.75rem; font-weight: 600; cursor: pointer; text-align: center; background: #f8fafc; color: #64748b; transition: all 0.15s; }
-.type-btn.active { border-color: #9333ea; background: #faf5ff; color: #7e22ce; }
-.lang-btn { padding: 5px 14px; border: 1px solid #e2e8f0; border-radius: 1rem; font-size: 0.75rem; font-weight: 500; cursor: pointer; background: none; color: #64748b; transition: all 0.15s; }
-.lang-btn.active { background: #9333ea; color: #fff; border-color: #9333ea; }
-.out-box { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 0.75rem; padding: 1.25rem; white-space: pre-wrap; font-size: 0.875rem; line-height: 1.9; color: #334155; }
-.copy-btn { font-size: 0.75rem; color: #9333ea; border: 1px solid #e9d5ff; border-radius: 0.5rem; padding: 4px 10px; cursor: pointer; background: none; }
-.spinner { display: inline-block; width: 16px; height: 16px; border: 2px solid rgba(255,255,255,0.4); border-top-color: #fff; border-radius: 50%; animation: spin 0.7s linear infinite; vertical-align: middle; }
-@keyframes spin { to { transform: rotate(360deg); } }
-.back-btn { display: inline-flex; align-items: center; gap: 5px; color: #9333ea; font-size: 0.85rem; font-weight: 500; text-decoration: none; margin-bottom: 1.5rem; }
-.back-btn:hover { text-decoration: underline; }
+    body { background: linear-gradient(135deg, #f8fafc 0%, #fef2f2 50%, #f8fafc 100%); }
+    .card { background: rgba(255,255,255,0.9); border: 1.5px solid #e2e8f0; border-radius: 1rem; padding: 1.5rem; }
+    .gen-btn { background: #9333ea; color: white; width: 100%; padding: 0.8rem; border-radius: 0.75rem; font-weight: 600; }
 </style>
 </head>
-<body class="min-h-screen p-4 md:p-8">
+<body class="p-4 md:p-8">
 <div class="max-w-2xl mx-auto">
-  <a href="index.html" class="back-btn">← 返回 Joyce's ABC Base</a>
-  <div class="card p-6 mb-5">
-    <div class="flex items-center gap-3 mb-1">
-      <div class="w-10 h-10 bg-purple-100 text-purple-600 rounded-xl flex items-center justify-center text-xl">📩</div>
-      <div>
-        <h1 class="text-xl font-extrabold text-slate-800">家長通知草稿</h1>
-        <p class="text-xs text-slate-400">一鍵生成中英文聯絡簿、活動通知、學習回饋</p>
-      </div>
+    <a href="index.html" class="text-purple-600 mb-6 block">← 返回控制台</a>
+    <div class="card mb-6">
+        <h1 class="text-xl font-bold mb-4">🚨 突發事件協助 (Prompt 生成版)</h1>
+        <div class="space-y-4">
+            <div>
+                <label class="text-xs font-bold text-slate-400 uppercase">事件摘要</label>
+                <textarea id="content" class="w-full border p-2 rounded" rows="3" placeholder="簡述發生了什麼事（例如：小朋友發生碰撞、東西遺失、情緒失控...）"></textarea>
+            </div>
+            <div class="grid grid-cols-2 gap-3">
+                <input type="text" id="child" class="border p-2 rounded" placeholder="孩子名字">
+                <select id="tone" class="border p-2 rounded">
+                    <option>溫暖親切 (適合小狀況)</option>
+                    <option>正式專業 (適合處理爭議)</option>
+                    <option>冷靜客觀 (適合嚴重受傷事件)</option>
+                </select>
+            </div>
+            <button onclick="generatePrompt()" class="gen-btn">📋 生成事件處理指令</button>
+        </div>
     </div>
-  </div>
-  <div class="card p-5 mb-4">
-    <div class="mb-3">
-      <label class="field-label">通知類型</label>
-      <div class="grid grid-cols-3 gap-2">
-        <div class="type-btn active" onclick="selType(this,'聯絡簿')">📓 聯絡簿</div>
-        <div class="type-btn" onclick="selType(this,'活動通知')">🔔 活動通知</div>
-        <div class="type-btn" onclick="selType(this,'學習回饋')">⭐ 學習回饋</div>
-        <div class="type-btn" onclick="selType(this,'請假說明')">📅 請假說明</div>
-        <div class="type-btn" onclick="selType(this,'作業說明')">📋 作業說明</div>
-        <div class="type-btn" onclick="selType(this,'感謝信')">💌 感謝信</div>
-      </div>
+
+    <div id="resultCard" class="card hidden">
+        <h2 class="font-bold mb-2">請複製下方指令，貼給 AI：</h2>
+        <textarea id="finalPrompt" class="w-full h-40 p-3 bg-slate-100 text-xs rounded mb-3" readonly></textarea>
+        <button onclick="copyToClipboard()" class="w-full border border-purple-600 text-purple-600 py-2 rounded-lg font-bold">複製到剪貼簿</button>
     </div>
-    <div class="mb-3">
-      <label class="field-label">主要內容（簡短描述）</label>
-      <textarea id="content" rows="3" placeholder="例：本週學習動物單字，小朋友表現很棒，下週請準備剪刀和膠水做勞作"></textarea>
-    </div>
-    <div class="grid grid-cols-2 gap-3 mb-3">
-      <div><label class="field-label">孩子名字（可選）</label><input type="text" id="child" placeholder="例：小明、Amy"></div>
-      <div><label class="field-label">班級</label><input type="text" id="cls" placeholder="例：太陽班、Star Class"></div>
-    </div>
-    <div class="mb-3">
-      <label class="field-label">語言版本</label>
-      <div class="flex gap-2">
-        <button class="lang-btn active" id="lb-both" onclick="selLang('both')">中文 + English</button>
-        <button class="lang-btn" id="lb-zh" onclick="selLang('zh')">純中文</button>
-        <button class="lang-btn" id="lb-en" onclick="selLang('en')">English only</button>
-      </div>
-    </div>
-    <div class="mb-4">
-      <label class="field-label">語氣風格</label>
-      <select id="tone"><option>溫暖親切</option><option>正式專業</option><option>活潑有趣</option></select>
-    </div>
-    <button class="gen-btn" id="genBtn" onclick="generate()">📩 生成通知草稿</button>
-  </div>
-  <div id="outZone" style="display:none" class="card p-5">
-    <div class="flex items-center justify-between mb-3">
-      <h2 class="font-bold text-slate-700">📄 通知草稿</h2>
-      <button class="copy-btn" onclick="copyOut()">📋 複製</button>
-    </div>
-    <div class="out-box" id="outContent"></div>
-  </div>
 </div>
+
 <script>
-let noticeType = '聯絡簿';
-let noticeLang = 'both';
-function selType(el, type) {
-  noticeType = type;
-  document.querySelectorAll('.type-btn').forEach(b => b.classList.remove('active'));
-  el.classList.add('active');
+function generatePrompt() {
+    const content = document.getElementById('content').value || '未填';
+    const child = document.getElementById('child').value || '學生';
+    const tone = document.getElementById('tone').value;
+    
+    const prompt = `你是一位資深的幼兒園主任。請幫我草擬一封給家長的信，處理以下突發事件：
+事件對象：${child}
+事件內容：${content}
+語氣要求：${tone}
+
+要求：
+1. 先表達關心，確保家長感受到我們對孩子的重視。
+2. 客觀陳述事件經過，不帶責備。
+3. 說明我們採取了哪些處理方式。
+4. 強調我們對未來的預防與改善措施。
+5. 雙語版本 (中文 + 英文)，文字要溫柔但有條理，結尾留出簽名欄。`;
+    
+    document.getElementById('finalPrompt').value = prompt;
+    document.getElementById('resultCard').classList.remove('hidden');
 }
-function selLang(lang) {
-  noticeLang = lang;
-  ['lb-both','lb-zh','lb-en'].forEach(id => { const b = document.getElementById(id); b.classList.remove('active'); b.style.background=''; b.style.color=''; b.style.borderColor=''; });
-  const map = {'both':'lb-both','zh':'lb-zh','en':'lb-en'};
-  const btn = document.getElementById(map[lang]);
-  btn.classList.add('active'); btn.style.background='#9333ea'; btn.style.color='#fff'; btn.style.borderColor='#9333ea';
-}
-async function generate() {
-  const content = document.getElementById('content').value || '（未填）';
-  const child = document.getElementById('child').value;
-  const cls = document.getElementById('cls').value;
-  const tone = document.getElementById('tone').value;
-  const langMap = { both:'同時生成中文和英文兩個版本，用「---」分隔', zh:'只用繁體中文', en:'Only in English' };
-  const btn = document.getElementById('genBtn');
-  btn.disabled = true; btn.innerHTML = '<span class="spinner"></span> 生成中...';
-  document.getElementById('outZone').style.display = 'block';
-  document.getElementById('outContent').textContent = '⏳ 生成中...';
-  try {
-    const res = await fetch('https://api.anthropic.com/v1/messages', {
-      method: 'POST', headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ model: 'claude-sonnet-4-6', max_tokens: 800, messages: [{ role: 'user', content: `你是${tone}的幼兒園英語老師。請幫我寫一份【${noticeType}】。\n內容：${content}\n${child?'孩子名字：'+child:''}\n${cls?'班級：'+cls:''}\n語言要求：${langMap[noticeLang]}\n\n要求：語氣${tone}，簡潔易讀，不超過200字（每個語言版本）。結尾留老師簽名空格。` }] })
-    });
-    const data = await res.json();
-    document.getElementById('outContent').textContent = data.content.map(i=>i.text||'').join('');
-  } catch(e) { document.getElementById('outContent').textContent = '生成失敗，請重試。'; }
-  btn.disabled = false; btn.innerHTML = '📩 生成通知草稿';
-}
-function copyOut() {
-  navigator.clipboard.writeText(document.getElementById('outContent').textContent).then(() => {
-    const btn = event.currentTarget; const orig = btn.innerHTML;
-    btn.innerHTML = '✅ 已複製！'; setTimeout(() => btn.innerHTML = orig, 1500);
-  });
+
+function copyToClipboard() {
+    const textarea = document.getElementById('finalPrompt');
+    textarea.select();
+    document.execCommand('copy');
+    alert('已複製！請將此指令貼給 AI。');
 }
 </script>
 </body>
