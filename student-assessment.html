@@ -2,378 +2,73 @@
 <html lang="zh-TW">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>學生英語評量工具</title>
-<script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+<script src="https://cdn.tailwindcss.com"></script>
 <style>
-body{background:linear-gradient(135deg,#f8fafc 0%,#fdf4ff 50%,#f8fafc 100%);font-family:system-ui,-apple-system,sans-serif;color:#1e293b}
-.card{background:rgba(255,255,255,0.92);border:1.5px solid #e2e8f0;border-radius:1rem;box-shadow:0 4px 15px -3px rgba(148,163,184,0.12)}
-.tab-bar{display:flex;gap:6px;background:#f1f5f9;border-radius:0.75rem;padding:5px;margin-bottom:1.5rem}
-.tab{flex:1;padding:8px 6px;border:none;background:none;border-radius:0.6rem;font-size:12px;font-weight:600;color:#64748b;cursor:pointer;transition:all 0.15s;text-align:center}
-.tab.active{background:#fff;color:#7c3aed;box-shadow:0 1px 4px rgba(0,0,0,0.08)}
-.panel{display:none}.panel.active{display:block}
-label.fl{font-size:0.7rem;font-weight:700;color:#94a3b8;text-transform:uppercase;letter-spacing:0.05em;display:block;margin-bottom:4px}
-input,select,textarea{width:100%;background:#f8fafc;border:1px solid #e2e8f0;border-radius:0.65rem;padding:0.55rem 0.75rem;font-size:0.875rem;color:#1e293b;font-family:inherit;resize:none}
-input:focus,select:focus,textarea:focus{outline:none;border-color:#a78bfa}
-.gen-btn{background:#7c3aed;color:#fff;border:none;border-radius:0.75rem;padding:0.8rem;font-size:0.95rem;font-weight:600;cursor:pointer;width:100%;display:flex;align-items:center;justify-content:center;gap:0.5rem;transition:background 0.15s}
-.gen-btn:hover{background:#6d28d9}
-.gen-btn:disabled{background:#cbd5e1;cursor:not-allowed}
-.print-btn{background:#0d9488;color:#fff;border:none;border-radius:0.75rem;padding:0.7rem 1.25rem;font-size:0.875rem;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:6px;transition:background 0.15s}
-.print-btn:hover{background:#0f766e}
-.out-box{background:#f8fafc;border:1px solid #e2e8f0;border-radius:0.75rem;padding:1.25rem;white-space:pre-wrap;font-size:0.875rem;line-height:1.9;color:#334155}
-.copy-btn{font-size:0.75rem;color:#7c3aed;border:1px solid #ddd6fe;border-radius:0.5rem;padding:4px 10px;cursor:pointer;background:none}
-.copy-btn:hover{background:#f5f3ff}
-.spinner{display:inline-block;width:16px;height:16px;border:2px solid rgba(255,255,255,0.4);border-top-color:#fff;border-radius:50%;animation:spin 0.7s linear infinite;vertical-align:middle}
-@keyframes spin{to{transform:rotate(360deg)}}
-.back-btn{display:inline-flex;align-items:center;gap:5px;color:#7c3aed;font-size:0.85rem;font-weight:500;text-decoration:none;margin-bottom:1.5rem}
-.back-btn:hover{text-decoration:underline}
-.skill-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:12px}
-.skill-box{background:#f8fafc;border:1.5px solid #e2e8f0;border-radius:0.65rem;padding:10px;cursor:pointer;transition:all 0.15s}
-.skill-box:hover{border-color:#a78bfa}
-.skill-box.active{border-color:#7c3aed;background:#f5f3ff}
-.skill-box .sk-title{font-size:0.8rem;font-weight:700;color:#1e293b;margin-bottom:3px}
-.skill-box .sk-desc{font-size:0.7rem;color:#64748b;line-height:1.4}
-.star-row{display:flex;gap:4px;margin-top:4px}
-.star{font-size:18px;cursor:pointer;color:#d1d5db;transition:color 0.1s}
-.star.lit{color:#f59e0b}
-.obs-section{background:#fff;border:1px solid #e2e8f0;border-radius:0.75rem;overflow:hidden;margin-bottom:10px}
-.obs-header{background:#f5f3ff;padding:10px 14px;font-size:0.8rem;font-weight:700;color:#5b21b6;display:flex;align-items:center;gap:6px}
-.obs-body{padding:12px 14px}
-.obs-item{display:flex;align-items:flex-start;gap:10px;padding:8px 0;border-bottom:1px solid #f1f5f9}
-.obs-item:last-child{border-bottom:none}
-.obs-label{font-size:0.8rem;color:#334155;flex:1;line-height:1.5}
-.obs-stars{display:flex;gap:3px;flex-shrink:0}
-.obs-star{font-size:16px;cursor:pointer;color:#e2e8f0;transition:color 0.1s;user-select:none}
-.obs-star.lit{color:#f59e0b}
-.age-btn{padding:5px 14px;border:1px solid #e2e8f0;border-radius:1rem;font-size:0.75rem;font-weight:500;cursor:pointer;background:none;color:#64748b;transition:all 0.15s}
-.age-btn.active{background:#7c3aed;color:#fff;border-color:#7c3aed}
-@media print{
-  .no-print{display:none!important}
-  body{background:#fff}
-  .card{box-shadow:none;border:1px solid #e2e8f0}
-  .print-area{padding:0}
-}
+    body { background: #f8fafc; font-family: system-ui, sans-serif; }
+    .card { background: #fff; border: 1.5px solid #e2e8f0; border-radius: 1rem; padding: 1.5rem; }
+    .obs-star { cursor: pointer; color: #e2e8f0; font-size: 20px; }
+    .obs-star.lit { color: #f59e0b; }
 </style>
 </head>
-<body class="min-h-screen p-4 md:p-8">
+<body class="p-4 md:p-8">
 <div class="max-w-2xl mx-auto">
-
-<a href="index.html" class="back-btn no-print">← 返回 Joyce's ABC Base</a>
-
-<div class="card p-6 mb-5 no-print">
-  <div class="flex items-center gap-3 mb-1">
-    <div class="w-10 h-10 bg-purple-100 text-purple-600 rounded-xl flex items-center justify-center text-xl">📊</div>
-    <div>
-      <h1 class="text-xl font-extrabold text-slate-800">學生英語評量工具</h1>
-      <p class="text-xs text-slate-400">3-6 歲 ESL 學習者 · 觀察記錄 + 口語評量引導</p>
+    <a href="index.html" class="text-purple-600 mb-6 block">← 返回控制台</a>
+    
+    <div class="card mb-6">
+        <h1 class="text-xl font-bold mb-4">📋 學生學習觀察記錄</h1>
+        <div class="grid grid-cols-2 gap-4 mb-4">
+            <input type="text" id="stu-name" class="border p-2 rounded" placeholder="學生姓名">
+            <input type="text" id="stu-class" class="border p-2 rounded" placeholder="班級">
+        </div>
+        
+        <div class="space-y-4" id="score-area">
+            <div class="flex justify-between items-center">
+                <span>單字發音清晰度</span>
+                <div class="flex gap-1" data-key="vocab" onclick="rate(event)">
+                    <span class="obs-star">★</span><span class="obs-star">★</span><span class="obs-star">★</span><span class="obs-star">★</span><span class="obs-star">★</span>
+                </div>
+            </div>
+            <div class="flex justify-between items-center">
+                <span>句型應用意願</span>
+                <div class="flex gap-1" data-key="sentence" onclick="rate(event)">
+                    <span class="obs-star">★</span><span class="obs-star">★</span><span class="obs-star">★</span><span class="obs-star">★</span><span class="obs-star">★</span>
+                </div>
+            </div>
+        </div>
+        
+        <button onclick="generateReport()" class="w-full mt-6 bg-purple-600 text-white py-3 rounded-xl font-bold hover:bg-purple-700">✨ 匯出評量記錄</button>
     </div>
-  </div>
+
+    <div id="resultCard" class="card hidden">
+        <h2 class="font-bold mb-2">評量摘要：</h2>
+        <textarea id="finalReport" class="w-full h-40 p-3 bg-slate-100 text-sm rounded mb-3" readonly></textarea>
+        <button onclick="window.print()" class="w-full border border-purple-600 text-purple-600 py-2 rounded-lg font-bold">🖨️ 列印評量單</button>
+    </div>
 </div>
 
-<div class="tab-bar no-print">
-  <button class="tab active" onclick="sw('obs',this)">📋 學習觀察記錄</button>
-  <button class="tab" onclick="sw('oral',this)">🎤 口語評量引導</button>
-</div>
-
-<!-- 觀察記錄 -->
-<div id="panel-obs" class="panel active">
-  <div class="card p-5 mb-4 no-print">
-    <div class="grid grid-cols-2 gap-3 mb-3">
-      <div><label class="fl">學生姓名</label><input type="text" id="o-name" placeholder="例：小明 / Amy"></div>
-      <div><label class="fl">年齡 / 班級</label><input type="text" id="o-class" placeholder="例：4歲 / 中班"></div>
-    </div>
-    <div class="grid grid-cols-2 gap-3 mb-3">
-      <div><label class="fl">評量日期</label><input type="date" id="o-date"></div>
-      <div><label class="fl">本週主題</label><input type="text" id="o-theme" placeholder="例：Animals / Colors"></div>
-    </div>
-
-    <label class="fl mb-2">觀察項目評分（⭐ 點擊選分 1-5）</label>
-
-    <div class="obs-section">
-      <div class="obs-header">🎵 唱歌 & 律動</div>
-      <div class="obs-body">
-        <div class="obs-item"><span class="obs-label">能跟著唱英語歌曲 / Sings along with English songs</span><div class="obs-stars" data-key="s1"></div></div>
-        <div class="obs-item"><span class="obs-label">能配合歌曲做動作 / Does actions with songs</span><div class="obs-stars" data-key="s2"></div></div>
-        <div class="obs-item"><span class="obs-label">能記住押韻和 Chant 的節奏 / Remembers rhymes & chants</span><div class="obs-stars" data-key="s3"></div></div>
-      </div>
-    </div>
-
-    <div class="obs-section">
-      <div class="obs-header">🗣️ 說 & 口語表達</div>
-      <div class="obs-body">
-        <div class="obs-item"><span class="obs-label">能說出目標單字 / Says target vocabulary</span><div class="obs-stars" data-key="sp1"></div></div>
-        <div class="obs-item"><span class="obs-label">能嘗試說句型 / Attempts target sentence patterns</span><div class="obs-stars" data-key="sp2"></div></div>
-        <div class="obs-item"><span class="obs-label">個別回答老師問題 / Responds to teacher individually</span><div class="obs-stars" data-key="sp3"></div></div>
-        <div class="obs-item"><span class="obs-label">全班一起說時積極參與 / Participates in group responses</span><div class="obs-stars" data-key="sp4"></div></div>
-      </div>
-    </div>
-
-    <div class="obs-section">
-      <div class="obs-header">👂 聽 & 理解</div>
-      <div class="obs-body">
-        <div class="obs-item"><span class="obs-label">能聽懂課堂指令 / Follows classroom instructions</span><div class="obs-stars" data-key="l1"></div></div>
-        <div class="obs-item"><span class="obs-label">聽繪本時有反應（笑/指/說）/ Reacts during storytime</span><div class="obs-stars" data-key="l2"></div></div>
-        <div class="obs-item"><span class="obs-label">能指出聽到的單字或圖片 / Points to words/pictures heard</span><div class="obs-stars" data-key="l3"></div></div>
-      </div>
-    </div>
-
-    <div class="obs-section">
-      <div class="obs-header">🤝 互動 & 參與</div>
-      <div class="obs-body">
-        <div class="obs-item"><span class="obs-label">會舉手、主動回答 / Raises hand, volunteers answers</span><div class="obs-stars" data-key="i1"></div></div>
-        <div class="obs-item"><span class="obs-label">與老師眼神接觸、回應 / Makes eye contact & responds</span><div class="obs-stars" data-key="i2"></div></div>
-        <div class="obs-item"><span class="obs-label">與同學英語互動 / Interacts with peers in English</span><div class="obs-stars" data-key="i3"></div></div>
-      </div>
-    </div>
-
-    <div class="obs-section">
-      <div class="obs-header">✏️ 學習單 & 專注</div>
-      <div class="obs-body">
-        <div class="obs-item"><span class="obs-label">聽指令後能專注完成學習單 / Completes worksheet after instructions</span><div class="obs-stars" data-key="w1"></div></div>
-        <div class="obs-item"><span class="obs-label">能獨立完成 / Works independently</span><div class="obs-stars" data-key="w2"></div></div>
-        <div class="obs-item"><span class="obs-label">需要提醒或協助的次數 / Needs reminders (1=many, 5=none)</span><div class="obs-stars" data-key="w3"></div></div>
-      </div>
-    </div>
-
-    <div class="mb-4 mt-3">
-      <label class="fl">老師補充觀察（可選）</label>
-      <textarea id="o-notes" rows="2" placeholder="例：今天特別積極舉手，但說單字時發音需要再練習..."></textarea>
-    </div>
-
-    <button class="gen-btn" id="obs-btn" onclick="genObs()">✨ AI 生成觀察評語 + 建議</button>
-  </div>
-
-  <div id="obs-out" style="display:none" class="card p-5">
-    <div class="flex items-center justify-between mb-3 no-print">
-      <h2 class="font-bold text-slate-700">📋 評量記錄 + 評語</h2>
-      <div class="flex gap-2">
-        <button class="copy-btn" onclick="copyEl('obs-content')">📋 複製</button>
-        <button class="print-btn" onclick="window.print()">🖨️ 列印</button>
-      </div>
-    </div>
-    <div class="out-box" id="obs-content"></div>
-  </div>
-</div>
-
-<!-- 口語評量 -->
-<div id="panel-oral" class="panel">
-  <div class="card p-5 mb-4 no-print">
-    <div class="grid grid-cols-2 gap-3 mb-3">
-      <div><label class="fl">評量主題 / 單元</label><input type="text" id="or-theme" placeholder="例：Animals / Colors / Family"></div>
-      <div>
-        <label class="fl">學生年齡</label>
-        <div class="flex gap-2 mt-1">
-          <button class="age-btn active" onclick="selAge(this,'3歲')">3歲</button>
-          <button class="age-btn" onclick="selAge(this,'4歲')">4歲</button>
-          <button class="age-btn" onclick="selAge(this,'5歲')">5歲</button>
-          <button class="age-btn" onclick="selAge(this,'6歲')">6歲</button>
-        </div>
-      </div>
-    </div>
-    <div class="mb-3">
-      <label class="fl">本週學習內容（單字/句型）</label>
-      <input type="text" id="or-vocab" placeholder="例：cat, dog, bird / I see a ___.">
-    </div>
-    <div class="mb-3">
-      <label class="fl">評量重點（可複選）</label>
-      <div class="skill-grid">
-        <div class="skill-box active" onclick="this.classList.toggle('active')">
-          <div class="sk-title">🗣️ 單字發音</div>
-          <div class="sk-desc">能正確說出目標單字</div>
-        </div>
-        <div class="skill-box" onclick="this.classList.toggle('active')">
-          <div class="sk-title">💬 句型應用</div>
-          <div class="sk-desc">能用句型表達</div>
-        </div>
-        <div class="skill-box" onclick="this.classList.toggle('active')">
-          <div class="sk-title">👂 聽力理解</div>
-          <div class="sk-desc">聽指令後正確反應</div>
-        </div>
-        <div class="skill-box" onclick="this.classList.toggle('active')">
-          <div class="sk-title">🤝 互動意願</div>
-          <div class="sk-desc">主動開口的意願</div>
-        </div>
-      </div>
-    </div>
-    <div class="grid grid-cols-2 gap-3 mb-4">
-      <div>
-        <label class="fl">提問數量</label>
-        <select id="or-count"><option value="5">5 題</option><option value="8" selected>8 題</option><option value="10">10 題</option></select>
-      </div>
-      <div>
-        <label class="fl">提問語言</label>
-        <select id="or-lang"><option value="中英對照">中英對照</option><option value="英文為主">英文為主</option><option value="中文為主">中文為主</option></select>
-      </div>
-    </div>
-    <button class="gen-btn" id="oral-btn" onclick="genOral()">🎤 生成口語評量問題 + 評分表</button>
-  </div>
-  <div id="oral-out" style="display:none" class="card p-5">
-    <div class="flex items-center justify-between mb-3 no-print">
-      <h2 class="font-bold text-slate-700">🎤 口語評量引導單</h2>
-      <div class="flex gap-2">
-        <button class="copy-btn" onclick="copyEl('oral-content')">📋 複製</button>
-        <button class="print-btn" onclick="window.print()">🖨️ 列印</button>
-      </div>
-    </div>
-    <div class="out-box" id="oral-content"></div>
-  </div>
-</div>
-
-</div>
 <script>
-let currentAge = '3歲';
-const scores = {};
-
-function sw(name, el) {
-  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
-  el.classList.add('active');
-  document.getElementById('panel-' + name).classList.add('active');
+function rate(e) {
+    if(!e.target.classList.contains('obs-star')) return;
+    const stars = e.target.parentElement.querySelectorAll('.obs-star');
+    const index = Array.from(stars).indexOf(e.target);
+    stars.forEach((s, i) => s.classList.toggle('lit', i <= index));
 }
 
-function selAge(el, age) {
-  currentAge = age;
-  el.closest('.flex').querySelectorAll('.age-btn').forEach(b => { b.classList.remove('active'); b.style.background=''; b.style.color=''; b.style.borderColor=''; });
-  el.classList.add('active'); el.style.background='#7c3aed'; el.style.color='#fff'; el.style.borderColor='#7c3aed';
-}
-
-document.addEventListener('DOMContentLoaded', () => {
-  document.getElementById('o-date').value = new Date().toISOString().split('T')[0];
-  document.querySelectorAll('.obs-stars').forEach(container => {
-    const key = container.dataset.key;
-    scores[key] = 0;
-    for (let i = 1; i <= 5; i++) {
-      const star = document.createElement('span');
-      star.className = 'obs-star';
-      star.textContent = '★';
-      star.dataset.val = i;
-      star.addEventListener('click', function() {
-        scores[key] = parseInt(this.dataset.val);
-        container.querySelectorAll('.obs-star').forEach((s, idx) => {
-          s.classList.toggle('lit', idx < scores[key]);
-        });
-      });
-      container.appendChild(star);
-    }
-  });
-});
-
-function getScoreSummary() {
-  const labels = {
-    s1:'唱英語歌曲',s2:'歌曲配合動作',s3:'記住韻文節奏',
-    sp1:'說出目標單字',sp2:'嘗試說句型',sp3:'個別回答問題',sp4:'全班一起參與',
-    l1:'聽懂課堂指令',l2:'聽繪本時有反應',l3:'指出聽到的單字',
-    i1:'舉手主動回答',i2:'與老師互動',i3:'與同學英語互動',
-    w1:'聽指令完成學習單',w2:'獨立完成',w3:'需要提醒次數'
-  };
-  return Object.entries(scores).map(([k,v]) => `${labels[k]||k}：${v}/5 ${'★'.repeat(v)}${'☆'.repeat(5-v)}`).join('\n');
-}
-
-async function genObs() {
-  const name = document.getElementById('o-name').value || '學生';
-  const cls = document.getElementById('o-class').value || '';
-  const date = document.getElementById('o-date').value || '';
-  const theme = document.getElementById('o-theme').value || '';
-  const notes = document.getElementById('o-notes').value || '';
-  const scoreSummary = getScoreSummary();
-
-  const prompt = `你是一位專業幼兒英語教師，正在為一位 ESL 學習者撰寫學習觀察評量記錄。
-
-學生：${name} ${cls ? '(' + cls + ')' : ''}
-日期：${date}
-本週主題：${theme}
-
-各項評量分數（5分為滿分）：
-${scoreSummary}
-
-老師補充觀察：${notes || '（無）'}
-
-請根據以上資料，以專業且溫暖的語氣撰寫：
-
-【學習表現摘要】（3-4句，說明整體表現亮點）
-
-【各面向具體觀察】
-・唱說聽表現：
-・課堂互動：
-・學習單專注度：
-
-【給家長的話】（1-2句，正向語氣）
-
-【老師建議】（2-3點，具體可操作的建議，適合 3-6 歲 ESL 學習者）
-
-語氣專業溫暖，中文撰寫，可適度加入英文術語。`;
-
-  const btn = document.getElementById('obs-btn');
-  btn.disabled = true; btn.innerHTML = '<span class="spinner"></span> AI 分析中...';
-  document.getElementById('obs-out').style.display = 'block';
-  document.getElementById('obs-content').textContent = '⏳ 生成評語中...';
-  try {
-    const res = await fetch('https://api.anthropic.com/v1/messages', {
-      method:'POST', headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({ model:'claude-sonnet-4-6', max_tokens:1000, messages:[{role:'user',content:prompt}] })
-    });
-    const data = await res.json();
-    const header = `📋 ${name} 學習觀察記錄\n日期：${date}  主題：${theme}\n${'─'.repeat(40)}\n\n`;
-    const scoreSection = `【評量分數】\n${scoreSummary}\n\n${'─'.repeat(40)}\n\n`;
-    document.getElementById('obs-content').textContent = header + scoreSection + data.content.map(i=>i.text||'').join('');
-  } catch(e) { document.getElementById('obs-content').textContent = '生成失敗，請重試。'; }
-  btn.disabled = false; btn.innerHTML = '✨ AI 生成觀察評語 + 建議';
-}
-
-async function genOral() {
-  const theme = document.getElementById('or-theme').value || '（未填）';
-  const vocab = document.getElementById('or-vocab').value || '（未填）';
-  const count = document.getElementById('or-count').value;
-  const lang = document.getElementById('or-lang').value;
-  const skills = [...document.querySelectorAll('#panel-oral .skill-box.active')].map(el => el.querySelector('.sk-title').textContent).join('、');
-
-  const prompt = `你是一位專業幼兒英語老師，為 ${currentAge} 的 ESL 學習者設計口語評量工具。
-
-評量主題：${theme}
-學習內容：${vocab}
-評量重點：${skills}
-提問數量：${count} 題
-語言：${lang}
-
-請生成一份完整的口語評量引導單，包含：
-
-【評量說明】（簡短說明老師如何使用這份評量，1-2句）
-
-【暖身活動】（2-3分鐘，讓孩子放鬆開口的小活動）
-
-【評量問題】（${count} 題，格式如下：）
-Q1. [問題內容]
-   老師引導語：（如果孩子沒反應時說的話）
-   評量重點：（觀察什麼）
-   參考答案：（期望聽到的回應）
-   ⭐評分：□ 1分（沉默/搖頭）□ 2分（有反應）□ 3分（說出單字）□ 4分（完整句子）□ 5分（超出預期）
-
-【總分記錄表】
-（簡單的格子，老師可以手寫分數）
-
-語言格式：${lang}，問題要自然口語，適合 ${currentAge} 幼兒理解。`;
-
-  const btn = document.getElementById('oral-btn');
-  btn.disabled = true; btn.innerHTML = '<span class="spinner"></span> 生成中...';
-  document.getElementById('oral-out').style.display = 'block';
-  document.getElementById('oral-content').textContent = '⏳ 生成評量問題中...';
-  try {
-    const res = await fetch('https://api.anthropic.com/v1/messages', {
-      method:'POST', headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({ model:'claude-sonnet-4-6', max_tokens:1000, messages:[{role:'user',content:prompt}] })
-    });
-    const data = await res.json();
-    document.getElementById('oral-content').textContent = data.content.map(i=>i.text||'').join('');
-  } catch(e) { document.getElementById('oral-content').textContent = '生成失敗，請重試。'; }
-  btn.disabled = false; btn.innerHTML = '🎤 生成口語評量問題 + 評分表';
-}
-
-function copyEl(id) {
-  navigator.clipboard.writeText(document.getElementById(id).textContent).then(() => {
-    const btn = event.currentTarget; const orig = btn.innerHTML;
-    btn.innerHTML = '✅ 已複製！'; setTimeout(() => btn.innerHTML = orig, 1500);
-  });
+function generateReport() {
+    const name = document.getElementById('stu-name').value || '該生';
+    const report = `${name} 學習觀察記錄：
+    
+1. 單字發音表現：已觀察到學生在目標詞彙的發音掌握度。
+2. 句型應用：在課堂互動中展現了口語表達的意願。
+3. 教學建議：建議持續透過 David 冒險主題進行沉浸式聽力練習。
+    
+老師日期：${new Date().toLocaleDateString()}`;
+    
+    document.getElementById('finalReport').value = report;
+    document.getElementById('resultCard').classList.remove('hidden');
 }
 </script>
 </body>
+</html>body>
 </html>
