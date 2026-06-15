@@ -2,186 +2,54 @@
 <html lang="zh-TW">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>音樂設計師 — 英語歌曲生成</title>
-<script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-<style>
-body { background: linear-gradient(135deg, #f8fafc 0%, #fdf4ff 50%, #f8fafc 100%); font-family: system-ui, -apple-system, sans-serif; color: #1e293b; }
-.card { background: rgba(255,255,255,0.9); border: 1.5px solid #e2e8f0; border-radius: 1rem; box-shadow: 0 4px 15px -3px rgba(148,163,184,0.12); }
-label.field-label { font-size: 0.7rem; font-weight: 700; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.05em; display: block; margin-bottom: 4px; }
-input, select, textarea { width: 100%; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 0.65rem; padding: 0.55rem 0.75rem; font-size: 0.875rem; color: #1e293b; font-family: inherit; resize: none; }
-input:focus, select:focus, textarea:focus { outline: none; border-color: #c084fc; }
-.gen-btn { background: #9333ea; color: #fff; border: none; border-radius: 0.75rem; padding: 0.8rem; font-size: 0.95rem; font-weight: 600; cursor: pointer; width: 100%; display: flex; align-items: center; justify-content: center; gap: 0.5rem; transition: background 0.15s; }
-.gen-btn:hover { background: #7e22ce; }
-.gen-btn:disabled { background: #cbd5e1; cursor: not-allowed; }
-.section-title { font-size: 0.75rem; font-weight: 700; margin-bottom: 8px; display: flex; align-items: center; gap: 4px; }
-.lyrics-box { background: #faf5ff; border: 1px solid #e9d5ff; border-radius: 0.75rem; padding: 1.25rem; white-space: pre-wrap; font-size: 0.875rem; line-height: 1.9; color: #1e293b; }
-.suno-box { background: #1e1b4b; color: #a5b4fc; border-radius: 0.75rem; padding: 1rem 1.25rem; font-size: 0.8rem; font-family: monospace; line-height: 1.7; white-space: pre-wrap; }
-.copy-btn { font-size: 0.75rem; border: 1px solid #e2e8f0; border-radius: 0.5rem; padding: 4px 10px; cursor: pointer; background: none; color: #64748b; }
-.copy-btn:hover { background: #f8fafc; }
-.step-badge { width: 22px; height: 22px; border-radius: 50%; background: #ede9fe; color: #7c3aed; font-size: 11px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-.spinner { display: inline-block; width: 16px; height: 16px; border: 2px solid rgba(255,255,255,0.4); border-top-color: #fff; border-radius: 50%; animation: spin 0.7s linear infinite; vertical-align: middle; }
-@keyframes spin { to { transform: rotate(360deg); } }
-.back-btn { display: inline-flex; align-items: center; gap: 5px; color: #9333ea; font-size: 0.85rem; font-weight: 500; text-decoration: none; margin-bottom: 1.5rem; }
-.back-btn:hover { text-decoration: underline; }
-</style>
+<title>音樂設計師 - Prompt 生成器</title>
+<script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="min-h-screen p-4 md:p-8">
+<body class="p-4 md:p-8 bg-slate-50">
 <div class="max-w-2xl mx-auto">
-
-  <a href="index.html" class="back-btn">← 返回 Joyce's ABC Base</a>
-
-  <div class="card p-6 mb-5">
-    <div class="flex items-center gap-3 mb-1">
-      <div class="w-10 h-10 bg-purple-100 text-purple-600 rounded-xl flex items-center justify-center text-xl">🎵</div>
-      <div>
-        <h1 class="text-xl font-extrabold text-slate-800">音樂設計師</h1>
-        <p class="text-xs text-slate-400">輸入教學目標，生成英語歌詞 + Suno 提示詞</p>
-      </div>
-    </div>
-  </div>
-
-  <div class="card p-5 mb-4">
-    <div class="mb-3">
-      <label class="field-label">教學目標 / 主題</label>
-      <input type="text" id="goal" placeholder="例：學習顏色 red, blue, yellow, green，搭配動作律動">
-    </div>
-
-    <div class="grid grid-cols-2 gap-3 mb-3">
-      <div>
-        <label class="field-label">音樂風格</label>
-        <select id="style">
-          <option value="children's pop, fun, upbeat, clapping rhythm">兒童流行曲</option>
-          <option value="nursery rhyme, gentle, playful, acoustic guitar">童謠風</option>
-          <option value="folk, acoustic, warm, finger picking">民謠木吉他</option>
-          <option value="jazz, swing, lively, piano, trumpet">爵士搖擺</option>
-          <option value="hip hop, fun, rhythmic, kids, clapping beat">兒童說唱</option>
-          <option value="lullaby, soft, calm, strings, peaceful">搖籃曲</option>
-        </select>
-      </div>
-      <div>
-        <label class="field-label">年齡難度</label>
-        <select id="level">
-          <option value="非常簡單，適合 2-4 歲">幼幼班（2-4歲）</option>
-          <option value="簡單，適合 4-5 歲" selected>小班（4-5歲）</option>
-          <option value="中等，適合 5-6 歲">中大班（5-6歲）</option>
-        </select>
-      </div>
-    </div>
-
-    <div class="mb-4">
-      <label class="field-label">動作指令（可選）</label>
-      <input type="text" id="action" placeholder="例：clap, jump, spin, point, stomp, wave">
-    </div>
-
-    <button class="gen-btn" id="genBtn" onclick="generate()">
-      🎵 生成歌詞 + Suno 提示詞
-    </button>
-  </div>
-
-  <div id="outZone" style="display:none">
-    <!-- 歌詞 -->
-    <div class="card p-5 mb-4">
-      <div class="flex items-center justify-between mb-3">
-        <div class="section-title text-purple-600">🎤 英語歌詞</div>
-        <button class="copy-btn" onclick="copyEl('lyricsOut')">📋 複製歌詞</button>
-      </div>
-      <div class="lyrics-box" id="lyricsOut"></div>
-    </div>
-
-    <!-- Suno 提示詞 -->
-    <div class="card p-5 mb-4">
-      <div class="flex items-center justify-between mb-3">
-        <div class="section-title text-purple-600">🎛️ Suno 提示詞（貼入 Style of Music）</div>
-        <button class="copy-btn" onclick="copyEl('sunoOut')" style="color:#a5b4fc;border-color:#3730a3;background:#1e1b4b">📋 複製</button>
-      </div>
-      <div class="suno-box" id="sunoOut"></div>
-    </div>
-
-    <!-- 步驟說明 -->
-    <div class="card p-5">
-      <div class="section-title text-purple-600 mb-3">🪄 如何用 Suno 生成音樂</div>
-      <div class="space-y-3">
-        <div class="flex gap-3 items-start">
-          <div class="step-badge">1</div>
-          <p class="text-sm text-slate-600">前往 <a href="https://suno.com" target="_blank" class="text-purple-600 underline">suno.com</a> 並登入帳號</p>
+    <a href="index.html" class="text-purple-600 mb-6 block">← 返回控制台</a>
+    <div class="card p-6 bg-white border rounded-2xl shadow-sm">
+        <h1 class="text-xl font-bold mb-4">🎵 音樂設計師 (Prompt 模式)</h1>
+        <div class="space-y-4">
+            <input type="text" id="goal" class="w-full border p-2 rounded" placeholder="教學目標 (例: 學習顏色 red, blue)">
+            <select id="style" class="w-full border p-2 rounded">
+                <option>兒童流行曲 (Upbeat Pop)</option>
+                <option>童謠風 (Nursery Rhyme)</option>
+                <option>兒童說唱 (Kids Hip Hop)</option>
+            </select>
+            <button onclick="generatePrompt()" class="w-full bg-purple-600 text-white py-3 rounded-xl font-bold hover:bg-purple-700">📋 生成並複製指令</button>
         </div>
-        <div class="flex gap-3 items-start">
-          <div class="step-badge">2</div>
-          <p class="text-sm text-slate-600">點擊「Create」→ 選擇「Custom mode」（自訂模式）</p>
-        </div>
-        <div class="flex gap-3 items-start">
-          <div class="step-badge">3</div>
-          <p class="text-sm text-slate-600">將上方歌詞貼入「<strong>Lyrics</strong>」欄位</p>
-        </div>
-        <div class="flex gap-3 items-start">
-          <div class="step-badge">4</div>
-          <p class="text-sm text-slate-600">將 Suno 提示詞貼入「<strong>Style of Music</strong>」欄位</p>
-        </div>
-        <div class="flex gap-3 items-start">
-          <div class="step-badge">5</div>
-          <p class="text-sm text-slate-600">輸入歌曲名稱，點擊「Create」— 約 30 秒完成！🎉</p>
-        </div>
-      </div>
     </div>
-  </div>
 
+    <div id="resultCard" class="card hidden p-6 bg-white border rounded-2xl shadow-sm mt-6">
+        <h2 class="font-bold mb-2">請複製下方指令，貼給 AI 生成：</h2>
+        <textarea id="finalPrompt" class="w-full h-40 p-3 bg-slate-100 text-xs rounded mb-3" readonly></textarea>
+        <button onclick="copyToClipboard()" class="w-full border border-purple-600 text-purple-600 py-2 rounded-lg font-bold">複製到剪貼簿</button>
+    </div>
 </div>
+
 <script>
-async function generate() {
-  const goal = document.getElementById('goal').value || '（未填）';
-  const style = document.getElementById('style').value;
-  const level = document.getElementById('level').value;
-  const action = document.getElementById('action').value;
-
-  const prompt = `你是一位幼兒英語音樂教育專家。請根據以下資訊生成英語教學歌曲內容。
-
+function generatePrompt() {
+    const goal = document.getElementById('goal').value || '兒童英語教學';
+    const style = document.getElementById('style').value;
+    
+    const prompt = `你是一位幼兒英語音樂專家。請根據以下要求生成一首歌：
 教學目標：${goal}
-難度程度：${level}
-${action ? '動作指令：' + action : ''}
+音樂風格：${style}
 
-請嚴格按照以下格式輸出，使用這兩個標題分隔：
-
-【歌詞】
-（寫適合 ${level} 的英語歌詞，要押韻、重複、朗朗上口，8-16行，每句英文後面附上中文翻譯，用括號標示）
-
-【Suno 提示詞】
-（只寫英文，格式：style描述, mood, instruments, tempo。使用風格：${style}。不要超過兩行）`;
-
-  const btn = document.getElementById('genBtn');
-  btn.disabled = true;
-  btn.innerHTML = '<span class="spinner"></span> 創作中...';
-  document.getElementById('outZone').style.display = 'block';
-  document.getElementById('lyricsOut').textContent = '⏳ AI 創作歌詞中...';
-  document.getElementById('sunoOut').textContent = '';
-
-  try {
-    const res = await fetch('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ model: 'claude-sonnet-4-6', max_tokens: 1000, messages: [{ role: 'user', content: prompt }] })
-    });
-    const data = await res.json();
-    const text = data.content.map(i => i.text || '').join('');
-    const lm = text.match(/【歌詞】([\s\S]*?)(?=【Suno 提示詞】|$)/);
-    const sm = text.match(/【Suno 提示詞】([\s\S]*?)$/);
-    document.getElementById('lyricsOut').textContent = lm ? lm[1].trim() : text;
-    document.getElementById('sunoOut').textContent = sm ? sm[1].trim() : '';
-  } catch(e) {
-    document.getElementById('lyricsOut').textContent = '生成失敗，請重試。';
-  }
-
-  btn.disabled = false;
-  btn.innerHTML = '🎵 生成歌詞 + Suno 提示詞';
+請生成：
+1. 【歌詞】：適合 3-6 歲，多重複、押韻、朗朗上口。中英對照。
+2. 【Suno 提示詞】：精準的音樂風格描述（英文），適合貼入 Suno 的 Style 欄位。`;
+    
+    document.getElementById('finalPrompt').value = prompt;
+    document.getElementById('resultCard').classList.remove('hidden');
 }
 
-function copyEl(id) {
-  navigator.clipboard.writeText(document.getElementById(id).textContent).then(() => {
-    const btn = event.currentTarget;
-    const orig = btn.innerHTML;
-    btn.innerHTML = '✅ 已複製！';
-    setTimeout(() => btn.innerHTML = orig, 1500);
-  });
+function copyToClipboard() {
+    const textarea = document.getElementById('finalPrompt');
+    textarea.select();
+    document.execCommand('copy');
+    alert('已複製指令！現在貼給 AI 即可生成精美的歌詞與音樂提示詞。');
 }
 </script>
 </body>
