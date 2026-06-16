@@ -6,70 +6,64 @@
 <title>Joyce's ABC Base</title>
 <script src="https://cdn.tailwindcss.com"></script>
 <style>
-body { background: linear-gradient(135deg, #f8fafc 0%, #f0f9ff 50%, #f8fafc 100%); color: #1e293b; font-family: system-ui, sans-serif; }
-.joyce-strip-card { background: rgba(255,255,255,0.85); backdrop-filter: blur(10px); border: 2px solid rgba(226,232,240,0.8); box-shadow: 0 4px 15px -3px rgba(148,163,184,0.12); }
-.joyce-btn-flat { background: #ffffff; color: #334155; border: 1.5px solid #e2e8f0; border-radius: 1rem; transition: all 0.2s ease; text-decoration: none; display: block; padding: 1rem; text-align: center; }
-.joyce-btn-flat:hover { background: #f0f9ff; border-color: #7dd3fc; transform: translateY(-2px); }
-.ai-tool-btn { background: #ffffff; border: 1.5px solid #e2e8f0; border-radius: 1rem; transition: all 0.2s ease; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 1rem 0.5rem; text-decoration: none; color: #334155; }
-.ai-tool-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 16px rgba(99,102,241,0.15); border-color: #a5b4fc; }
-.ai-badge { font-size: 0.6rem; background: #eef2ff; color: #4338ca; border-radius: 0.5rem; padding: 2px 6px; font-weight: 700; }
+    body { background: linear-gradient(135deg, #f8fafc 0%, #f0f9ff 50%, #f8fafc 100%); color: #1e293b; }
+    .joyce-strip-card { background: rgba(255,255,255,0.85); backdrop-filter: blur(10px); border: 2px solid rgba(226,232,240,0.8); border-radius: 1rem; padding: 1.5rem; }
+    .joyce-btn { background: #ffffff; border: 1.5px solid #e2e8f0; border-radius: 0.75rem; transition: all 0.2s; padding: 0.75rem; text-align: center; display: block; font-size: 0.8rem; font-weight: 700; }
+    .joyce-btn:hover { background: #f0f9ff; border-color: #7dd3fc; transform: translateY(-2px); }
+    .ai-tool-btn { background: #ffffff; border: 1.5px solid #e2e8f0; border-radius: 1rem; padding: 1rem; transition: all 0.2s; display: flex; align-items: center; }
+    .ai-tool-btn:hover { border-color: #a5b4fc; transform: translateY(-2px); }
 </style>
 </head>
-<body class="min-h-screen flex flex-col md:flex-row">
-<aside class="w-full md:w-72 bg-white/70 backdrop-blur-md p-6 border-r border-slate-200">
-    <div class="flex items-center gap-3 mb-10">
-        <div class="w-14 h-14 bg-gradient-to-tr from-purple-500 to-indigo-500 rounded-full flex items-center justify-center text-2xl font-black text-white shadow-md">J</div>
-        <div>
-            <h1 class="text-xl font-extrabold text-slate-800">Joyce's ABC Base</h1>
-            <p class="text-xs text-sky-600 font-bold uppercase tracking-wider">TEACHING HUB</p>
+<body class="p-6 md:p-10">
+<div class="max-w-5xl mx-auto">
+    <h1 class="text-3xl font-black mb-8 text-slate-800">Joyce's ABC Base</h1>
+
+    <h2 class="text-xl font-bold mb-4 text-slate-700">🎮 課堂互動遊戲基地</h2>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+        <div class="joyce-strip-card">
+            <h3 class="font-bold mb-3 text-sky-700">🔤 Alphabet</h3>
+            <div class="grid grid-cols-2 gap-2">
+                <a href="https://joyce53306.github.io/alphabet-match/" class="joyce-btn">小班</a>
+                <a href="https://joyce53306.github.io/alphabet-pair-match/" class="joyce-btn">中班</a>
+                <a href="https://joyce53306.github.io/phonics-level-up/" class="joyce-btn">大班</a>
+                <a href="https://joyce53306.github.io/phonics-hero/" class="joyce-btn">中弱班</a>
+            </div>
+        </div>
+        <div class="joyce-strip-card">
+            <h3 class="font-bold mb-3 text-amber-700">📚 Phonics & Sight Words</h3>
+            <div class="grid grid-cols-2 gap-2">
+                <a href="https://joyce53306.github.io/mid-phonics-english/" class="joyce-btn">短母音</a>
+                <a href="https://joyce53306.github.io/phonics-long-vowels/" class="joyce-btn">長母音</a>
+                <a href="https://joyce53306.github.io/mid-sight-words/" class="joyce-btn">Sight(中)</a>
+                <a href="https://joyce53306.github.io/Review-sight-words/" class="joyce-btn">Sight(大中)</a>
+            </div>
+        </div>
+        <div class="joyce-strip-card">
+            <h3 class="font-bold mb-3 text-emerald-700">🚀 David 互動基地</h3>
+            <div class="grid grid-cols-1 gap-2">
+                <a href="https://joyce53306.github.io/Small-Class-Sentences-Practicess/" class="joyce-btn">小班課本</a>
+                <a href="https://joyce53306.github.io/mid-class-english/" class="joyce-btn">中班課本</a>
+                <a href="https://joyce53306.github.io/big-class-english/" class="joyce-btn">大班課本</a>
+            </div>
         </div>
     </div>
-</aside>
-<main class="flex-1 p-10 overflow-y-auto">
-    <h2 class="text-2xl font-extrabold mb-8">✨ 精選必備工具</h2>
-    
-    <!-- 🎮 課堂互動遊戲 -->
-    <h3 class="text-lg font-bold mb-4">🎮 課堂互動遊戲基地</h3>
-    <div class="joyce-strip-card rounded-2xl p-5 mb-10 grid grid-cols-4 gap-4">
-        <a href="https://joyce53306.github.io/alphabet-match/" class="joyce-btn-flat">Alphabet 小</a>
-        <a href="https://joyce53306.github.io/alphabet-pair-match/" class="joyce-btn-flat">Alphabet 中</a>
-        <a href="https://joyce53306.github.io/phonics-level-up/" class="joyce-btn-flat">Phonics 大</a>
-        <a href="https://joyce53306.github.io/phonics-hero/" class="joyce-btn-flat">Phonics 中弱</a>
-        <a href="https://joyce53306.github.io/mid-phonics-english/" class="joyce-btn-flat">短母音</a>
-        <a href="https://joyce53306.github.io/phonics-long-vowels/" class="joyce-btn-flat">長母音</a>
-        <a href="https://joyce53306.github.io/mid-sight-words/" class="joyce-btn-flat">中班 Sight Words</a>
-        <a href="https://joyce53306.github.io/Review-sight-words/" class="joyce-btn-flat">大中班 Review</a>
-    </div>
 
-    <!-- 💼 備課大腦 -->
-    <h3 class="text-lg font-bold mb-4">💼 備課大腦</h3>
-    <div class="joyce-strip-card rounded-2xl p-5 mb-10 grid grid-cols-4 gap-4">
-        <a href="newsletter-generator.html" class="ai-tool-btn">📰 課堂快訊</a>
+    <h2 class="text-xl font-bold mb-4 text-slate-700">💼 備課大腦 & 學習歷程</h2>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10">
+        <a href="review-box.html" class="ai-tool-btn">📦 <span class="ml-2 font-bold">Michelle's Review Box (國中複習系統)</span></a>
+        <a href="newsletter-generator.html" class="ai-tool-btn">📰 課堂快訊產生器</a>
         <a href="lesson-planner.html" class="ai-tool-btn">📅 備課神器</a>
         <a href="music-designer.html" class="ai-tool-btn">🎵 音樂設計師</a>
-        <a href="sel-generator.html" class="ai-tool-btn">📖 SEL 提問精靈</a>
+        <a href="student-assessment.html" class="ai-tool-btn">📋 學習觀察記錄</a>
+        <a href="worksheet-generator.html" class="ai-tool-btn">📄 學習單生成器</a>
     </div>
 
-    <!-- 📈 學習歷程追蹤 -->
-    <h3 class="text-lg font-bold mb-4">📈 學習歷程追蹤</h3>
-    <div class="joyce-strip-card rounded-2xl p-5 mb-10">
-        <a href="review-box.html" class="ai-tool-btn flex-row justify-start p-4">
-            <div class="text-2xl mr-4">📦</div>
-            <div>
-                <div class="font-bold">Michelle's Review Box</div>
-                <div class="text-xs text-slate-400">國中五科練習、測驗紀錄與 AI 批改系統</div>
-            </div>
-            <span class="ai-badge ml-auto">全功能系統</span>
-        </a>
+    <h2 class="text-xl font-bold mb-4 text-slate-700">📣 親師溝通</h2>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <a href="line-cleaner.html" class="joyce-btn">✨ LINE 文字清洗</a>
+        <a href="notice-generator.html" class="joyce-btn">📩 家長通知草稿</a>
+        <a href="incident-helper.html" class="joyce-btn">🚨 突發事件小幫手</a>
     </div>
-
-    <!-- 📣 親師溝通 -->
-    <h3 class="text-lg font-bold mb-4">📣 親師溝通</h3>
-    <div class="joyce-strip-card rounded-2xl p-5 mb-10 grid grid-cols-3 gap-4">
-        <a href="line-cleaner.html" class="ai-tool-btn">✨ LINE 文字清洗</a>
-        <a href="notice-generator.html" class="ai-tool-btn">📩 家長通知草稿</a>
-        <a href="incident-helper.html" class="ai-tool-btn">🚨 突發事件小幫手</a>
-    </div>
-</main>
+</div>
 </body>
 </html>
