@@ -1,100 +1,52 @@
 <!DOCTYPE html>
 <html lang="zh-TW">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Michelle's Review Box ✨</title>
-<script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
-<style>
-/* ... (保留您原本的 CSS，無需更動) ... */
-body { background: linear-gradient(135deg, #f8fafc 0%, #f0f4ff 50%, #f8fafc 100%); font-family: system-ui, -apple-system, sans-serif; color: #1e293b; }
-.card { background: rgba(255,255,255,0.92); border: 1.5px solid #e2e8f0; border-radius: 1rem; box-shadow: 0 4px 15px -3px rgba(148,163,184,0.12); }
-.tab-btn { border: 1.5px solid #e2e8f0; border-radius: 0.75rem; padding: 0.5rem 0.75rem; font-size: 0.8rem; font-weight: 600; cursor: pointer; background: #fff; color: #64748b; transition: all 0.15s; }
-.tab-btn.active { color: #fff; border-color: transparent; }
-.chip { border: 1.5px solid #e2e8f0; border-radius: 2rem; padding: 4px 12px; font-size: 0.72rem; font-weight: 600; cursor: pointer; background: #fff; color: #64748b; transition: all 0.15s; }
-.mode-btn { border: 1.5px solid #e2e8f0; border-radius: 0.65rem; padding: 0.5rem; font-size: 0.8rem; font-weight: 600; cursor: pointer; background: #fff; color: #64748b; flex: 1; transition: all 0.15s; }
-.mode-btn.active { background: #1e293b; color: #fff; }
-.gen-btn { border: none; border-radius: 0.75rem; padding: 0.85rem; font-size: 0.95rem; font-weight: 700; cursor: pointer; color: #fff; width: 100%; display: flex; align-items: center; justify-content: center; gap: 0.5rem; }
-.out-box { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 0.75rem; padding: 1.25rem; white-space: pre-wrap; font-size: 0.875rem; line-height: 1.9; color: #334155; }
-.spinner { display: inline-block; width: 16px; height: 16px; border: 2px solid rgba(255,255,255,0.4); border-top-color: #fff; border-radius: 50%; animation: spin 0.7s linear infinite; }
-@keyframes spin { to { transform: rotate(360deg); } }
-</style>
+    <meta charset="UTF-8">
+    <title>Michelle's Review Box - 完整版</title>
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="min-h-screen p-4 md:p-8">
-<div class="max-w-2xl mx-auto">
-    <!-- UI 結構與原本一致，此處省略，請保持您原本的 HTML 結構，僅將下方的 <script> 區塊替換 -->
-    <!-- (請確保保留您原本的 HTML 結構，這裡是核心邏輯替換) -->
-    
-    <!-- 為了避免篇幅過長，建議您僅替換 <script> 區塊 -->
-</div>
-
-<script>
-// 1. API Key 管理
-let apiKey = localStorage.getItem('claude_api_key');
-
-function getApiKey() {
-    if (!apiKey) {
-        apiKey = prompt("請輸入您的 Anthropic API Key (僅儲存於您的瀏覽器):");
-        if (apiKey) localStorage.setItem('claude_api_key', apiKey);
-    }
-    return apiKey;
-}
-
-// 2. 修改後的 startAI 函數
-async function startAI() {
-    const key = getApiKey();
-    if (!key) return;
-
-    const topic = document.getElementById('topicSel').value;
-    const userText = document.getElementById('userInput').value.trim();
-    const sub = CURRICULUM[cur.sub];
-    const gl = sub.grades[cur.grade].label;
-
-    // 定義 Prompt
-    let prompt = "";
-    if(cur.mode === 'quiz') {
-        prompt = `請針對「${gl}・${cur.sec}」的主題「${topic}」出題。要求：${QP[cur.qt]}。${userText ? '\n補充：'+userText : ''}`;
-    } else if(cur.mode === 'explain') {
-        prompt = `請解釋「${gl}・${cur.sec}」中的「${topic}」。方式：${EP[cur.es]}。${userText ? '\n補充：'+userText : ''}`;
-    } else {
-        if(!userText) { alert('請輸入作答內容！'); return; }
-        prompt = `請鼓勵性批改 Michelle 的作答：①肯定優點 ②指出錯誤 ③給出正確觀念 ④建議改進方向。作答：${userText}`;
-    }
-
-    const btn = document.getElementById('genBtn');
-    btn.disabled = true;
-    btn.innerHTML = '<span class="spinner"></span> AI 老師思考中…';
-    
-    try {
-        const res = await fetch('https://api.anthropic.com/v1/messages', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'x-api-key': key,
-                'anthropic-version': '2023-06-01',
-                'anthropic-dangerous-direct-browser-access': 'true'
-            },
-            body: JSON.stringify({
-                model: 'claude-3-5-sonnet-20240620',
-                max_tokens: 1000,
-                system: `你是一位親切專業的${sub.label}老師，學生叫 Michelle，程度國三。用繁體中文。`,
-                messages: [{ role: 'user', content: prompt }]
-            })
-        });
+<body class="bg-slate-50 p-6">
+    <div class="max-w-4xl mx-auto">
+        <h1 class="text-3xl font-black text-slate-800 mb-6">📦 Michelle's Review Box</h1>
         
-        const data = await res.json();
-        const text = data.content ? data.content[0].text : "連線失敗，請確認 API Key 有效。";
-        showOut(text);
-    } catch(e) {
-        showOut("連線錯誤，請確認網路環境或 API Key。");
-    } finally {
-        btn.disabled = false;
-        btn.innerHTML = '✨ 開始練習';
-    }
-}
+        <!-- 課程選擇區域 -->
+        <div class="grid grid-cols-3 gap-4 mb-8">
+            <div class="p-4 bg-white rounded-xl shadow-sm border">
+                <h2 class="font-bold text-slate-700">選擇科目</h2>
+                <select id="sub" class="w-full mt-2 p-2 border rounded">
+                    <option>國文</option>
+                    <option>英語</option>
+                    <option>數學</option>
+                    <option>理化</option>
+                    <option>社會</option>
+                </select>
+            </div>
+            <div class="p-4 bg-white rounded-xl shadow-sm border">
+                <h2 class="font-bold text-slate-700">選擇年級</h2>
+                <select id="grade" class="w-full mt-2 p-2 border rounded">
+                    <option>七年級</script>
+                    <option>八年級</script>
+                    <option>九年級</script>
+                </select>
+            </div>
+            <div class="p-4 bg-white rounded-xl shadow-sm border">
+                <h2 class="font-bold text-slate-700">練習模式</h2>
+                <select id="mode" class="w-full mt-2 p-2 border rounded">
+                    <option>觀念測驗</option>
+                    <option>重點解說</option>
+                    <option>AI 批改</option>
+                </select>
+            </div>
+        </div>
 
-// ... (保留原本的其他 function 如 tryChart, addRec, setSub 等)
-</script>
+        <!-- 練習區 -->
+        <div class="bg-white p-6 rounded-2xl shadow-lg border">
+            <h2 class="text-lg font-bold mb-4">題目輸入</h2>
+            <textarea id="userInput" class="w-full h-32 p-4 border rounded-xl" placeholder="請輸入本週重點或題目..."></textarea>
+            <button id="genBtn" class="mt-4 w-full bg-indigo-600 text-white font-bold py-3 rounded-xl hover:bg-indigo-700">
+                ✨ 開始複習與練習
+            </button>
+        </div>
+    </div>
 </body>
 </html>
