@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🎙️ Joyce's ABC Adventure - 課堂觀察記錄工具</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'PingFang TC', 'Microsoft JhengHei', sans-serif; }
+  body { background: #F7F6F3; color: #2d3436; padding: 16px; max-width: 480px; margin: 0 auto; }
+  header { text-align: center; margin-bottom: 16px; }
+  header h1 { font-size: 1.3rem; color: #6B5B95; }
+  header p { color: #888; font-size: 0.8rem; }
+  .card { background: #fff; border-radius: 14px; padding: 16px; box-shadow: 0 3px 14px rgba(0,0,0,0.06); margin-bottom: 14px; }
+  .field { margin-bottom: 10px; }
+  .field label { display: block; font-size: 0.78rem; font-weight: 600; color: #666; margin-bottom: 4px; }
+  select, input[type=text] { width: 100%; padding: 9px 10px; border: 1.5px solid #e2e2e2; border-radius: 8px; font-size: 0.9rem; }
+  .mic-btn {
+    width: 100%; padding: 20px; border: none; border-radius: 16px;
+    background: #8A7FB0; color: #fff; font-size: 1.05rem; font-weight: 600;
+    cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px;
+  }
+  .mic-btn.recording { background: #D8534F; }
+  .mic-btn .dot { width: 10px; height: 10px; border-radius: 50%; background: #fff; opacity: 0.85; }
+  .mic-btn.recording .dot { animation: pulse 1s infinite; }
+  @keyframes pulse { 0%,100% { opacity: 0.3; } 50% { opacity: 1; } }
+  .transcript-box {
+    margin-top: 12px; min-height: 60px; padding: 12px; background: #FAF9FB;
+    border: 1.5px dashed #ddd; border-radius: 10px; font-size: 0.95rem; color: #333;
+  }
+  .transcript-box.empty { color: #aaa; }
+  .save-row { display: flex; gap: 8px; margin-top: 10px; }
+  .save-row button { flex: 1; padding: 11px; border: none; border-radius: 10px; font-size: 0.9rem; cursor: pointer; font-weight: 600; }
+  .btn-save { background: #4F7A5E; color: #fff; }
+  .btn-clear { background: #eee; color: #666; }
+  .filter-row { display: flex; gap: 8px; margin-bottom: 10px; }
+  .filter-row select, .filter-row input { flex: 1; }
+  .record-item {
+    padding: 10px 12px; border-bottom: 1px solid #eee; font-size: 0.85rem;
+  }
+  .record-item:last-child { border-bottom: none; }
+  .record-meta { font-size: 0.75rem; color: #999; margin-bottom: 3px; display: flex; justify-content: space-between; }
+  .record-text { color: #333; }
+  .record-item button { border: none; background: none; color: #c0504f; font-size: 0.75rem; cursor: pointer; padding: 0; margin-top: 4px; }
+  .export-btn { width: 100%; padding: 12px; border: none; border-radius: 10px; background: #6B5B95; color: #fff; font-weight: 600; cursor: pointer; margin-top: 8px; }
+  .empty-note { text-align: center; color: #aaa; font-size: 0.85rem; padding: 20px 0; }
+  .browser-warn { background: #FFF4E5; color: #8a6100; padding: 10px 12px; border-radius: 10px; font-size: 0.8rem; margin-bottom: 12px; display: none; }
+</style>
+</head>
+<body>
+<header>
+  <h1>🎙️ 課堂觀察記錄</h1>
+  <p>Joyce's ABC Adventure</p>
+</header>
+<div class="browser-warn" id="browserWarn">
+  ⚠️ 這個功能在 Chrome 瀏覽器支援度最好，建議用 Chrome 開啟這個網頁。
+</div>
+<div class="card">
+  <div class="field">
+    <label>🌱 班級</label>
+    <select id="classSelect">
+      <option value="Pre-K">🌱 Pre-K</option>
+      <option value="K1">🐣 K1</option>
+      <option value="K2">🦋 K2</option>
+      <option value="K3">🦁 K3</option>
+    </select>
+  </div>
+  <div class="field">
+    <label>🧒 孩子姓名</label>
+    <input type="text" id="childName" placeholder="輸入孩子的名字或代號">
+  </div>
+  <div class="field">
+    <label>🏷️ 觀察類別</label>
+    <select id="category">
+      <option value="語言輸出">🗣️ 語言輸出</option>
+      <option value="常規">📋 常規</option>
+      <option value="社交">🤝 社交</option>
+      <option value="其他">✨ 其他</option>
+    </select>
+  </div>
+  <button class="mic-btn" id="micBtn">
+    <span class="dot"></span>
+    <span id="micLabel">按住開始錄音</span>
+  </button>
+  <div class="transcript-box empty" id="transcriptBox">辨識的文字會顯示在這裡……</div>
+  <div class="save-row">
+    <button class="btn-clear" id="clearBtn">清除重錄</button>
+    <button class="btn-save" id="saveBtn">💾 儲存這筆記錄</button>
+  </div>
+</div>
+<div class="card">
+  <div class="filter-row">
+    <select id="filterClass">
+      <option value="">全部班級</option>
+      <option value="Pre-K">Pre-K</option>
+      <option value="K1">K1</option>
+      <option value="K2">K2</option>
+      <option value="K3">K3</option>
+    </select>
+    <input type="text" id="filterName" placeholder="依姓名篩選">
+  </div>
+  <div id="recordList"></div>
+  <p class="empty-note" id="emptyNote" style="display:none">還沒有任何記錄</p>
+  <button class="export-btn" id="exportBtn">⬇️ 匯出成 CSV</button>
+</div>
+<script>
+let records = JSON.parse(localStorage.getItem('joyceObservations') || '[]');
+let currentTranscript = '';
+let recognizing = false;
+let recognition = null;
+const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+if (!SR) {
+  document.getElementById('browserWarn').style.display = 'block';
+  document.getElementById('micBtn').disabled = true;
+  document.getElementById('micLabel').textContent = '此瀏覽器不支援語音辨識';
+} else {
+  recognition = new SR();
+  recognition.lang = 'zh-TW';
+  recognition.continuous = true;
+  recognition.interimResults = true;
+  recognition.onresult = (event) => {
+    let finalText = '';
+    let interimText = '';
+    for (let i = event.resultIndex; i < event.results.length; i++) {
+      const t = event.results[i][0].transcript;
+      if (event.results[i].isFinal) finalText += t;
+      else interimText += t;
+    }
+    if (finalText) currentTranscript += finalText;
+    updateTranscriptBox(currentTranscript + interimText);
+  };
+  recognition.onerror = (e) => {
+    console.error('speech error', e.error);
+    stopRecording();
+  };
+  recognition.onend = () => {
+    if (recognizing) {
+      recognition.start();
+    }
+  };
+}
+function updateTranscriptBox(text) {
+  const box = document.getElementById('transcriptBox');
+  if (text.trim()) {
+    box.textContent = text;
+    box.classList.remove('empty');
+  } else {
+    box.textContent = '辨識的文字會顯示在這裡……';
+    box.classList.add('empty');
+  }
+}
+function startRecording() {
+  if (!recognition) return;
+  recognizing = true;
+  currentTranscript = document.getElementById('transcriptBox').classList.contains('empty') ? '' : document.getElementById('transcriptBox').textContent;
+  recognition.start();
+  const btn = document.getElementById('micBtn');
+  btn.classList.add('recording');
+  document.getElementById('micLabel').textContent = '錄音中…再按一次停止';
+}
+function stopRecording() {
+  recognizing = false;
+  if (recognition) recognition.stop();
+  const btn = document.getElementById('micBtn');
+  btn.classList.remove('recording');
+  document.getElementById('micLabel').textContent = '按一下開始錄音';
+}
+document.getElementById('micBtn').addEventListener('click', () => {
+  if (recognizing) stopRecording();
+  else startRecording();
+});
+document.getElementById('clearBtn').addEventListener('click', () => {
+  stopRecording();
+  currentTranscript = '';
+  updateTranscriptBox('');
+});
+document.getElementById('saveBtn').addEventListener('click', () => {
+  const box = document.getElementById('transcriptBox');
+  const text = box.classList.contains('empty') ? '' : box.textContent.trim();
+  const childName = document.getElementById('childName').value.trim();
+  if (!text) { alert('還沒有錄到任何文字，請先錄音'); return; }
+  if (!childName) { alert('請輸入孩子姓名'); return; }
+  stopRecording();
+  const record = {
+    id: Date.now(),
+    date: new Date().toLocaleDateString('zh-TW'),
+    time: new Date().toLocaleTimeString('zh-TW', { hour: '2-digit', minute: '2-digit' }),
+    class: document.getElementById('classSelect').value,
+    child: childName,
+    category: document.getElementById('category').value,
+    text: text
+  };
+  records.unshift(record);
+  localStorage.setItem('joyceObservations', JSON.stringify(records));
+  currentTranscript = '';
+  updateTranscriptBox('');
+  document.getElementById('childName').value = '';
+  renderList();
+});
+function renderList() {
+  const filterClass = document.getElementById('filterClass').value;
+  const filterName = document.getElementById('filterName').value.trim().toLowerCase();
+  const list = document.getElementById('recordList');
+  const emptyNote = document.getElementById('emptyNote');
+  list.innerHTML = '';
+  const filtered = records.filter(r => {
+    if (filterClass && r.class !== filterClass) return false;
+    if (filterName && !r.child.toLowerCase().includes(filterName)) return false;
+    return true;
+  });
+  if (filtered.length === 0) {
+    emptyNote.style.display = 'block';
+    return;
+  }
+  emptyNote.style.display = 'none';
+  filtered.forEach(r => {
+    const item = document.createElement('div');
+    item.className = 'record-item';
+    item.innerHTML = `
+      <div class="record-meta">
+        <span>${r.date} ${r.time} · ${r.class} · ${r.child} · ${r.category}</span>
+      </div>
+      <div class="record-text"></div>
+      <button data-id="${r.id}">刪除</button>
+    `;
+    item.querySelector('.record-text').textContent = r.text;
+    item.querySelector('button').addEventListener('click', () => deleteRecord(r.id));
+    list.appendChild(item);
+  });
+}
+function deleteRecord(id) {
+  records = records.filter(r => r.id !== id);
+  localStorage.setItem('joyceObservations', JSON.stringify(records));
+  renderList();
+}
+document.getElementById('filterClass').addEventListener('change', renderList);
+document.getElementById('filterName').addEventListener('input', renderList);
+document.getElementById('exportBtn').addEventListener('click', () => {
+  if (records.length === 0) { alert('目前沒有任何記錄可以匯出'); return; }
+  const header = ['日期', '時間', '班級', '孩子姓名', '觀察類別', '記錄內容'];
+  const rows = records.map(r => [r.date, r.time, r.class, r.child, r.category, r.text.replace(/"/g, '""')]);
+  const csvContent = [header, ...rows]
+    .map(row => row.map(cell => `"${cell}"`).join(','))
+    .join('\n');
+  const blob = new Blob(['\uFEFF' + csvContent], { type: 'text/csv;charset=utf-8;' });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement('a');
+  link.href = url;
+  link.download = `joyce-observations-${new Date().toISOString().slice(0,10)}.csv`;
+  link.click();
+  URL.revokeObjectURL(url);
+});
+renderList();
+</script>
+</body>
+</html>
